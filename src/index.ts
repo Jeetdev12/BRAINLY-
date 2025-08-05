@@ -3,15 +3,21 @@ const app = express();
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken"
 import { UserModel } from "./db";
+import cors from "cors";
+
 
  app.use(express.json())
 
- // Handle unmatched routes
-app.use((req, res) => {
-  console.warn(`❌ 404 - Route not found: ${req.method} ${req.originalUrl}`);
-  res.status(404).json({ error: "Route not found" });
-});
+const allowedOrigins = [
+    'http://localhost:3000'
+];
 
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true,
+}));
+
+ mongoose.connect(process.env.MONGODB_URL!)
 
 app.post("/api/v1/signup",async(req,res)=>{
   
@@ -32,11 +38,14 @@ app.post("/api/v1/signup",async(req,res)=>{
 })
 
 app.post("api/v1/signin",(req,res)=>{
+
+  return res.status(200).json({message:"Everything id okk"})
     
 })
 
 app.get("api/v1/content",(req,res)=>{
-    
+  return res.status(200).json({message:"Everything id okk"})
+     
 })
 
 app.delete("api/v1/content",(req,res)=>{

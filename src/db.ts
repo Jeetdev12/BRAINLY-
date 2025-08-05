@@ -1,7 +1,12 @@
 
 import mongoose,{  model, Schema } from "mongoose";
+import dotenv from 'dotenv';
+dotenv.config();
 
- mongoose.connect("mongodb+srv://yadumanjeet1234:p9cV6uQR4gRECnBq@cluster0.lobm4lv.mongodb.net/")
+
+ mongoose.connect(process.env.MONGODB_URL!)
+
+
 
 
 const UserSchema = new Schema({

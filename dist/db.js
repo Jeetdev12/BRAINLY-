@@ -32,12 +32,23 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-mongoose_1.default.connect("mongodb+srv://yadumanjeet1234:p9cV6uQR4gRECnBq@cluster0.lobm4lv.mongodb.net/");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+mongoose_1.default.connect(process.env.MONGODB_URL).then((res) => {
+    console.log("res", res);
+}).catch((err) => {
+    console.log("error:", err);
+})
+    .then(() => console.log('MongoDB connected!'))
+    .catch((err) => console.error('MongoDB connection error:', err));
 const UserSchema = new mongoose_1.Schema({
-    username: { type: String, unique: true, require: true },
-    password: { type: String, require: true }
+    username: { type: String, unique: true, required: true },
+    password: { type: String, required: true }
 });
 exports.UserModel = mongoose_1.default.model("user", UserSchema);

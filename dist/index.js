@@ -15,8 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const db_1 = require("./db");
-app.use(express_1.default.json);
-app.post("api/v1/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const cors_1 = __importDefault(require("cors"));
+app.use(express_1.default.json());
+const allowedOrigins = [
+    'http://localhost:3000'
+];
+app.use((0, cors_1.default)({
+    origin: allowedOrigins,
+    credentials: true,
+}));
+app.post("/api/v1/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("signup route hitted..");
     // zod validation , hash password
     const username = req.body.username;
     const password = req.body.password;
@@ -24,10 +33,13 @@ app.post("api/v1/signup", (req, res) => __awaiter(void 0, void 0, void 0, functi
         username: username,
         password: password
     });
+    return res.status(200).json({ message: "Sign up successful.." });
 }));
 app.post("api/v1/signin", (req, res) => {
+    return res.status(200).json({ message: "Everything id okk" });
 });
 app.get("api/v1/content", (req, res) => {
+    return res.status(200).json({ message: "Everything id okk" });
 });
 app.delete("api/v1/content", (req, res) => {
 });
