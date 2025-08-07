@@ -4,9 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
- mongoose.connect(process.env.MONGODB_URL!)
-
-
 
 
 const UserSchema = new Schema({
@@ -15,9 +12,13 @@ const UserSchema = new Schema({
 })
 
 
+export const UserModel = model("user",UserSchema)
 
+const ContentSchema = new Schema({
+  title:String,
+  link:String,
+  tags:[{type:mongoose.Types.ObjectId, ref:'Tags'}],
+  userId:{type:mongoose.Types.ObjectId,ref:'User', required:true}
+})
 
-
-
-
-export const UserModel =  mongoose.model("user",UserSchema)
+export const ContentModel = model("content",ContentSchema)

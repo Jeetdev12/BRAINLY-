@@ -40,13 +40,6 @@ exports.UserModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-mongoose_1.default.connect(process.env.MONGODB_URL).then((res) => {
-    console.log("res", res);
-}).catch((err) => {
-    console.log("error:", err);
-})
-    .then(() => console.log('MongoDB connected!'))
-    .catch((err) => console.error('MongoDB connection error:', err));
 const UserSchema = new mongoose_1.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true }
