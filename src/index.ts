@@ -2,9 +2,10 @@ import express from "express"
 const app = express();
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken"
-import { UserModel } from "./db";
+import { ContentModel, UserModel } from "./db";
 import cors from "cors";
 import dotenv from 'dotenv';
+import { userMiddleware } from "./middleware";
 dotenv.config();
 
 app.use(express.json())
@@ -18,7 +19,6 @@ app.use(cors({
   credentials: true,
 }));
 
-//mongodb+srv://yadumanjeet1234:aKHcmg3t94GpscHp@brainly.sdfbxnc.mongodb.net/
 
 
 const uri = "";
@@ -75,9 +75,22 @@ app.post("/api/v1/signin", async (req, res) => {
 
 })
 
-app.get("/api/v1/content", (req, res) => {
-  return res.status(200).json({ message: "Everything id okk" })
+app.post("/api/v1/content", userMiddleware, async (req, res) => {
+    const link = req.body.link;
+    const type = req.body.type;
+    await ContentModel.create({
+        link,
+        type,
+        title: req.body.title,
+        //@ts-ignore
+        userId: req.userId,
+        tags: []
+    })
 
+    res.json({
+        message: "Content added"
+    })
+    
 })
 
 app.delete("/api/v1/content", (req, res) => {

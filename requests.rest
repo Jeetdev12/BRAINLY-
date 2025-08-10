@@ -1,9 +1,12 @@
 
 
-POST http://localhost:3000/api/v1/signin
+POST http://localhost:3000/api/v1/content
 Content-Type: application/json
+'authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODk0ZDI5YTFmMzY1MzlhMmRjNzZlYzIiLCJpYXQiOjE3NTQ2MjA5ODR9.9MoCnjlsNkt2k-z0q34U2KkG3fnbRBkhxXdhk2mCsfU'
 
 {
-    "username":"manjeet",
-    "password":"sdnfdsjfdfd"
+    "link":"manjeet",
+    "type":"sdnfdsjfdfd",
+    "tage":[]
+
 }

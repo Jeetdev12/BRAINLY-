@@ -19,6 +19,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("./db");
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const middleware_1 = require("./middleware");
 dotenv_1.default.config();
 app.use(express_1.default.json());
 const allowedOrigins = [
@@ -28,7 +29,6 @@ app.use((0, cors_1.default)({
     origin: allowedOrigins,
     credentials: true,
 }));
-//mongodb+srv://yadumanjeet1234:aKHcmg3t94GpscHp@brainly.sdfbxnc.mongodb.net/
 const uri = "";
 // const MONGO_URI =process.env.MONGODB_URL;
 mongoose_1.default.connect(`${process.env.MONGODB_URL}`)
@@ -52,29 +52,40 @@ app.post("/api/v1/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 }));
 app.post("/api/v1/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const username = req.body.username;
-    const password = req.body.password;
-    const existingUser = yield db_1.UserModel.findOne({
-        username,
-        password
-    });
-    if (existingUser) {
-        const token = jsonwebtoken_1.default.sign({
-            id: existingUser._id
-        }, `${process.env.JWT_PASSWORD}`);
-        res.json({
-            token
+    console.log("signin....");
+    const { username, password } = req.body;
+    try {
+        const response = yield db_1.UserModel.findOne({
+            username, password
         });
+        if (response) {
+            const token = jsonwebtoken_1.default.sign({ _id: response._id }, `${process.env.JWT_PASSWORD}`);
+            return res.status(200).json({ message: token });
+        }
+        else {
+            return res.status(403).json({ message: "Invalid credentials" });
+        }
     }
-    else {
-        res.status(403).json({
-            message: "Incorrrect credentials"
-        });
+    catch (err) {
+        console.log("error:", err);
+        return res.status(400).json({ message: err.message });
     }
 }));
-app.get("api/v1/content", (req, res) => {
-    return res.status(200).json({ message: "Everything id okk" });
-});
-app.delete("api/v1/content", (req, res) => {
+app.post("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const link = req.body.link;
+    const type = req.body.type;
+    yield db_1.ContentModel.create({
+        link,
+        type,
+        title: req.body.title,
+        //@ts-ignore
+        userId: req.userId,
+        tags: []
+    });
+    res.json({
+        message: "Content added"
+    });
+}));
+app.delete("/api/v1/content", (req, res) => {
 });
 app.listen(3000);
