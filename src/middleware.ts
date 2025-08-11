@@ -2,22 +2,33 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const userMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const header = req.headers["Authorization"];
-    const decoded = jwt.verify(header as string, `${process.env.JWT_PASSWORD}`)
-    if (decoded) {
-        console.log((decoded as JwtPayload).id)
-        if (typeof decoded === "string") {
+
+    const header:any = req.headers["authorization"];
+
+
+    try {
+        const decoded = jwt.verify(header, `${process.env.JWT_PASSWORD}`)
+        console.log("token", header, decoded,`${process.env.JWT_PASSWORD}`)
+        if (decoded) {
+            console.log((decoded as JwtPayload)._id)
+            if (typeof decoded === "string") {
+                res.status(403).json({
+                    message: "You are not logged in"
+                })
+                return;
+            }
+            //@ts-ignore
+            req.userId = (decoded as JwtPayload)._id;
+            next()
+        } else {
             res.status(403).json({
                 message: "You are not logged in"
             })
-            return;    
         }
-        //@ts-ignore
-        req.userId = (decoded as JwtPayload).id;
-        next()
-    } else {
-        res.status(403).json({
-            message: "You are not logged in"
-        })
+    } catch (err: any) {
+        res.json(403).json({ message: err.message })
     }
+
+
+
 }

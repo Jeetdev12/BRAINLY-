@@ -66,9 +66,9 @@ app.post("/api/v1/signin", async (req, res) => {
     } else {
       return res.status(403).json({ message: "Invalid credentials" })
     }
-  } catch (err:any) {
+  } catch (err: any) {
     console.log("error:", err)
-    return res.status(400).json({message:err.message})
+    return res.status(400).json({ message: err.message })
   }
 
 
@@ -76,21 +76,34 @@ app.post("/api/v1/signin", async (req, res) => {
 })
 
 app.post("/api/v1/content", userMiddleware, async (req, res) => {
-    const link = req.body.link;
-    const type = req.body.type;
-    await ContentModel.create({
-        link,
-        type,
-        title: req.body.title,
-        //@ts-ignore
-        userId: req.userId,
-        tags: []
-    })
+  const link = req.body.link;
+  const type = req.body.type;
+  await ContentModel.create({
+    link,
+    type,
+    title: req.body.title,
+    //@ts-ignore
+    userId: req.userId,
+    tags: []
+  })
 
-    res.json({
-        message: "Content added"
-    })
-    
+  res.json({
+    message: "Content added"
+  })
+
+})
+
+app.get("/api/v1/content", userMiddleware, async (req: {userId: any;
+}, res: any) => {
+
+  const userId = req.userId;
+  const content = await ContentModel.find({
+    userId: userId,
+  }).populate("userId","username")
+
+  res.json({
+    content
+  })
 })
 
 app.delete("/api/v1/content", (req, res) => {

@@ -86,6 +86,15 @@ app.post("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter
         message: "Content added"
     });
 }));
+app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.userId;
+    const content = yield db_1.ContentModel.find({
+        userId: userId,
+    }).populate("userId", "username");
+    res.json({
+        content
+    });
+}));
 app.delete("/api/v1/content", (req, res) => {
 });
 app.listen(3000);
