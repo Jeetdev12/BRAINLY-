@@ -20,6 +20,7 @@ const db_1 = require("./db");
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const middleware_1 = require("./middleware");
+const utils_1 = require("./utils");
 dotenv_1.default.config();
 app.use(express_1.default.json());
 const allowedOrigins = [
@@ -95,6 +96,60 @@ app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(
         content
     });
 }));
-app.delete("/api/v1/content", (req, res) => {
+app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => {
+    const contentId = req.body.contentId;
+    db_1.ContentModel.deleteMany({ field: contentId });
 });
+app.post("/api/v1/brain/share", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const share = req.body.share;
+    console.log("userId: req.userId", req.userId);
+    if (share) {
+        const existingLink = yield db_1.LinkModel.findOne({
+            userId: req.userId
+        });
+        if (existingLink) {
+            res.json({ hash: existingLink.hash });
+            return;
+        }
+        const hash = (0, utils_1.random)(10);
+        console.log("userId: req.userId", req.userId);
+        yield db_1.LinkModel.create({
+            userId: req.userId,
+            hash: hash
+        });
+        res.json({ message: hash });
+    }
+    else {
+        yield db_1.LinkModel.deleteOne({
+            userId: req.userId,
+        });
+        res.status(200).json({ message: "link removed" });
+    }
+}));
+app.get("/api/v1/brain/:shareLink", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const hash = req.params.shareLink;
+    const link = yield db_1.LinkModel.findOne({ hash: hash });
+    console.log("link:", link, hash);
+    if (!link) {
+        res.status(411).json({
+            message: "SORRY INCORRECT INPUT"
+        });
+        return;
+    }
+    const content = yield db_1.ContentModel.findOne({
+        userId: link.userId
+    });
+    const username = yield db_1.UserModel.findOne({
+        _id: link.userId
+    });
+    if (!username) {
+        res.status(411).json({
+            message: "user not found , logically this should not happen "
+        });
+    }
+    res.json({
+        username: username,
+        content: content
+    });
+}));
 app.listen(3000);
