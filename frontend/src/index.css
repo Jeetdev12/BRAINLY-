@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+
+@theme {
+  --font-display: "Satoshi", "sans-serif";
+  --color-brand: #d97706;
+  extend:{
+    colors:{
+      purple:{
+        200:'#e0e7ff',
+        500:'#9d9de8'
+        600:'#5046e4'
+
+      }
+    }
+  }
+}
