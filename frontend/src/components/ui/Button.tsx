@@ -9,10 +9,10 @@ interface ButtonProps{
 
 const varientClasses = {
     "Primary":"bg-purple-600 text-white",
-    "Secondary":"bg-purple-200 text-purple-600"
+    "Secondary":"bg-gray-200 text-purple-600"
 }
 
-const defaultStyles = "px-10 py-2 rounded-md m-2 font-light flex"
+const defaultStyles = "px-8 py-2 rounded-md m-2 font-light flex"
 
 export function Button({varient, text, startIcon}:ButtonProps){
     return(
