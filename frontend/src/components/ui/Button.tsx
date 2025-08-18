@@ -4,7 +4,8 @@ import type { ReactElement } from "react";
 interface ButtonProps{
     varient:"Primary" | "Secondary",
     text:String, 
-    startIcon:ReactElement
+    startIcon:ReactElement,
+    onClick?:()=>void
 }
 
 const varientClasses = {
@@ -12,11 +13,11 @@ const varientClasses = {
     "Secondary":"bg-gray-200 text-purple-600"
 }
 
-const defaultStyles = "px-8 py-2 rounded-md m-2 font-light flex"
+const defaultStyles = "px-8 py-2 rounded-md m-2 font-light flex cursor-pointer"
 
-export function Button({varient, text, startIcon}:ButtonProps){
+export function Button({varient, text, startIcon, onClick}:ButtonProps){
     return(
-    <button className={ varientClasses[varient] + " "+ defaultStyles}>{startIcon}
+    <button onClick={onClick} className={ varientClasses[varient] + " "+ defaultStyles}>{startIcon}
   {text}
     </button>)
 
