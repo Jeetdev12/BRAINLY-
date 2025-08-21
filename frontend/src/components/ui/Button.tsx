@@ -6,6 +6,8 @@ interface ButtonProps{
     text:String, 
     startIcon:ReactElement,
     onClick?:()=>void
+    fullWidth?:boolean,
+    loading?:boolean
 }
 
 const varientClasses = {
@@ -13,11 +15,11 @@ const varientClasses = {
     "Secondary":"bg-gray-200 text-purple-600"
 }
 
-const defaultStyles = "px-8 py-2 rounded-md m-2 font-light flex cursor-pointer"
+const defaultStyles = "flex justify-center items-center px-8 py-2 rounded-md m-2 font-light flex cursor-pointer"
 
-export function Button({varient, text, startIcon, onClick}:ButtonProps){
+export function Button({varient, text, startIcon,loading, onClick,fullWidth}:ButtonProps){
     return(
-    <button onClick={onClick} className={ varientClasses[varient] + " "+ defaultStyles}>{startIcon}
+    <button onClick={onClick} className={ `${varientClasses[varient]} ${defaultStyles} ${fullWidth ? "w-full":""} ${loading? "opacity-50":""}`} disabled={loading}   >{startIcon}
   {text}
     </button>)
 

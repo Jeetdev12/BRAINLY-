@@ -8,10 +8,11 @@ interface CardProps {
 
 export default function Card({ title, link, type }: CardProps) {
 
+    const linkId = link.split("/")[3]
+    console.log(linkId)
 
     return (
-        <div className="">
-            <div className=" p-4 bg-white rounded-md  border-2 border-slate-100 min-h-48 max-w-72">
+            <div className=" p-4 bg-white rounded-md  border-2 border-slate-100 min-h-48 w-72">
                 <div className="flex items-center justify-between ">
                     <div className="flex items-center text-md">
                         <div className="flex text-gray-500 pr-2 ">
@@ -31,14 +32,13 @@ export default function Card({ title, link, type }: CardProps) {
                     </div>
                 </div>
                 <div className="pt-4">
-                    {type == "youtube" && <iframe className="w-full" src={link.replace("watch", "embed").replace("?v=","/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>}
+                    {type == "youtube" && <iframe className="w-full" src={`https://www.youtube.com/embed/${linkId}`}title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>}
 
                     {type == "twitter" && <blockquote className="twitter-tweet">
-                        <a href={link.replace("x.com", "twitter.com")}></a>
+                        <a href="https://x.com/ShashiTharoor/status/1958554973328814574"></a>
                     </blockquote>}
 
                 </div>
             </div>
-        </div>
     )
 }

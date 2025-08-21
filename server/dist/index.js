@@ -22,14 +22,12 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const middleware_1 = require("./middleware");
 const utils_1 = require("./utils");
 dotenv_1.default.config();
-app.use(express_1.default.json());
-const allowedOrigins = [
-    'http://localhost:3000'
-];
 app.use((0, cors_1.default)({
-    origin: allowedOrigins,
-    credentials: true,
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
+app.use(express_1.default.json());
 const uri = "";
 // const MONGO_URI =process.env.MONGODB_URL;
 mongoose_1.default.connect(`${process.env.MONGODB_URL}`)
@@ -75,6 +73,7 @@ app.post("/api/v1/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
 app.post("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const link = req.body.link;
     const type = req.body.type;
+    console.log(link, type);
     yield db_1.ContentModel.create({
         link,
         type,

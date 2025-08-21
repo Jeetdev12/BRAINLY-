@@ -9,16 +9,16 @@ import { userMiddleware } from "./middleware";
 import { random } from "./utils";
 dotenv.config();
 
+app.use(cors({
+  origin: ["http://localhost:5173","http://localhost:3000"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(express.json())
 
-const allowedOrigins = [
-  'http://localhost:3000'
-];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
+
+
 
 
 
@@ -79,6 +79,7 @@ app.post("/api/v1/signin", async (req, res) => {
 app.post("/api/v1/content", userMiddleware, async (req, res) => {
   const link = req.body.link;
   const type = req.body.type;
+  // console.log(link, type)
   await ContentModel.create({
     link,
     type,
@@ -116,7 +117,7 @@ app.delete("/api/v1/content", userMiddleware, (req, res) => {
 
 app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
   const share = req.body.share;
-    console.log("userId: req.userId",req.userId)
+  console.log("userId: req.userId", req.userId)
 
   if (share) {
     const existingLink = await LinkModel.findOne({
@@ -124,12 +125,12 @@ app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
     })
 
     if (existingLink) {
-      res.json({hash: existingLink.hash })
+      res.json({ hash: existingLink.hash })
       return;
     }
 
     const hash = random(10);
-    console.log("userId: req.userId",req.userId)
+    console.log("userId: req.userId", req.userId)
     await LinkModel.create(
       {
         userId: req.userId,
@@ -148,9 +149,9 @@ app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
 app.get("/api/v1/brain/:shareLink", async (req, res) => {
   const hash = req.params.shareLink
   const link: any = await LinkModel.findOne(
-    { hash:hash }
+    { hash: hash }
   )
-  console.log("link:", link,hash)
+  console.log("link:", link, hash)
   if (!link) {
     res.status(411).json({
       message: "SORRY INCORRECT INPUT"
