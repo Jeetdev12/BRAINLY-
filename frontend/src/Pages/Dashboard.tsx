@@ -28,7 +28,7 @@ export const Dashboard = () => {
         {/* <Header/> */}
         <CreateContentModal open={modelClose} closeModal={() => setModelClose(false)} />
         <div className="flex items-center justify-end  gap-2">
-          <Button onClick={() => { setModelClose(true) }} varient="Primary" text={"Add content"} startIcon={<PlusIcon />} />
+          <Button  onClick={() => { setModelClose(true) }} varient="Primary" text={"Add content"} startIcon={<PlusIcon />} />
           <Button varient="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
 
         </div>

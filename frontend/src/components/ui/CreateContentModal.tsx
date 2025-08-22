@@ -39,8 +39,8 @@ export default function CreateContentModal({open, closeModal }) {
                 <div className="flex flex-cols justify-center p-4">
                     <span className=" bg-white p-2">
                         <div className="flex justify-end">
-                            <div onClick={closeModal} className=" flex cursor-pointer gap-12  p-1">
-                             Add Content     <CrossIcon />
+                            <div onClick={closeModal} className="  flex cursor-pointer gap-12  p-1">
+                             Add Content     <div className="hover:bg-slate-200"><CrossIcon /></div>
                             </div>
 
                         </div>

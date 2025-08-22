@@ -11,11 +11,11 @@ interface ButtonProps{
 }
 
 const varientClasses = {
-    "Primary":"bg-purple-600 text-white",
-    "Secondary":"bg-gray-200 text-purple-600"
+    "Primary":"bg-purple-600 hover:bg-purple-700 text-white shadow-indigo-500/50 ",
+    "Secondary":"bg-gray-300 hover:bg-gray-400 text-purple-600"
 }
 
-const defaultStyles = "flex justify-center items-center px-8 py-2 rounded-md m-2 font-light flex cursor-pointer"
+const defaultStyles = "flex justify-center items-center px-8 py-2 rounded-md m-2 font-light flex cursor-pointer ring"
 
 export function Button({varient, text, startIcon,loading, onClick,fullWidth}:ButtonProps){
     return(
