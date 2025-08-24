@@ -7,7 +7,7 @@ export function SidebarItems({text , icon, className}:{
 }){
 
     return(
-        <div className={`flex flex-row gap-4 transition-all duration-100 hover:bg-gray-400 rounded-sm  items-center justify-center ${className}`} > 
+        <div className={`flex flex-row gap-4 transition-all duration-100 hover:bg-gray-200 rounded-sm  items-center  ${className}`} > 
 {icon} {text}
         </div>
     )

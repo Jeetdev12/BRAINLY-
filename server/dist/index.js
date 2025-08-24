@@ -95,10 +95,19 @@ app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(
         content
     });
 }));
-app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => {
-    const contentId = req.body.contentId;
-    db_1.ContentModel.deleteMany({ field: contentId });
-});
+app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const contentId = req.body.contentId;
+        const result = yield db_1.ContentModel.deleteMany({ _id: contentId });
+        res.status(200).json({
+            message: "Content Deleted successfully.",
+            deletedCount: result.deletedCount,
+        });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}));
 app.post("/api/v1/brain/share", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const share = req.body.share;
     console.log("userId: req.userId", req.userId);
@@ -111,7 +120,7 @@ app.post("/api/v1/brain/share", middleware_1.userMiddleware, (req, res) => __awa
             return;
         }
         const hash = (0, utils_1.random)(10);
-        console.log("userId: req.userId", req.userId);
+        console.log("userId: req.userId", req.userId, existingLink.hash);
         yield db_1.LinkModel.create({
             userId: req.userId,
             hash: hash

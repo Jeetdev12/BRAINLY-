@@ -109,18 +109,28 @@ app.get("/api/v1/content", userMiddleware, async (req: {
   })
 })
 
-app.delete("/api/v1/content", userMiddleware, (req, res) => {
+app.delete("/api/v1/content", userMiddleware, async (req, res) => {
+  try {
+    const contentId = req.body.contentId;
 
-  const contentId = req.body.contentId
-  ContentModel.deleteMany({ field: contentId })
-})
+    const result = await ContentModel.deleteMany({ _id: contentId });
+
+    res.status(200).json({
+      message: "Content Deleted successfully.",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error:any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
   const share = req.body.share;
   console.log("userId: req.userId", req.userId)
 
   if (share) {
-    const existingLink = await LinkModel.findOne({
+    const existingLink:any = await LinkModel.findOne({
       userId: req.userId
     })
 
@@ -130,7 +140,7 @@ app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
     }
 
     const hash = random(10);
-    console.log("userId: req.userId", req.userId)
+    console.log("userId: req.userId", req.userId, existingLink.hash)
     await LinkModel.create(
       {
         userId: req.userId,
@@ -148,6 +158,9 @@ app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
 
 app.get("/api/v1/brain/:shareLink", async (req, res) => {
   const hash = req.params.shareLink
+
+
+
   const link: any = await LinkModel.findOne(
     { hash: hash }
   )
