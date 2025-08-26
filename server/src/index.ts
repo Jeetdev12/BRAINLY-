@@ -10,7 +10,7 @@ import { random } from "./utils";
 dotenv.config();
 
 app.use(cors({
-  origin: ["http://localhost:5173","http://localhost:3000"],
+  origin: ["http://localhost:5173", "http://localhost:3000"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
@@ -109,6 +109,19 @@ app.get("/api/v1/content", userMiddleware, async (req: {
   })
 })
 
+//filter content by types
+app.post("/api/v1/filter/type", userMiddleware, async (req, res) => {
+
+  const type = req.params.type
+  const content = await ContentModel.find({
+    type: type,
+  }).populate("userId", "username")
+  console.log("filter content:", content)
+  res.json({
+    content
+  })
+})
+
 app.delete("/api/v1/content", userMiddleware, async (req, res) => {
   try {
     const contentId = req.body.contentId;
@@ -119,18 +132,18 @@ app.delete("/api/v1/content", userMiddleware, async (req, res) => {
       message: "Content Deleted successfully.",
       deletedCount: result.deletedCount,
     });
-  } catch (error:any) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
 
-
+// Share your brain 
 app.post("/api/v1/brain/share", userMiddleware, async (req, res) => {
   const share = req.body.share;
   console.log("userId: req.userId", req.userId)
 
   if (share) {
-    const existingLink:any = await LinkModel.findOne({
+    const existingLink: any = await LinkModel.findOne({
       userId: req.userId
     })
 

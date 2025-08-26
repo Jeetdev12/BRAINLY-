@@ -12,17 +12,18 @@ interface ButtonProps {
 }
 
 const varientClasses = {
-    "Primary": "bg-purple-600 hover:bg-purple-700 text-white shadow-indigo-500/50 ",
-    "Secondary": "bg-purple-200 hover:bg-purple-300 text-purple-600",
+    "Primary": "bg-purple-600 hover:bg-purple-700 text-white shadow-indigo-500/50 flex justify-center items-center px-5 py-2 rounded-md m-2 font-light flex cursor-pointer  gap-3",
+    "Secondary": "bg-purple-200 hover:bg-purple-300 text-purple-600 flex justify-center items-center px-5 py-2 rounded-md m-2 font-light flex cursor-pointer  gap-3",
     "none":""
 }
 
-const defaultStyles = "flex justify-center items-center px-5 py-2 rounded-md m-2 font-light flex cursor-pointer  gap-3"
+const defaultStyles = "flex gap-2 items-center"
 
 export function Button({ varient, text, startIcon, loading, onClick, fullWidth ,className}: ButtonProps) {
     return (
-        <button onClick={onClick} className={`${varientClasses[varient]} ${defaultStyles} ${fullWidth ? "w-full" : ""} ${loading ? "opacity-50" : ""}  ${className}`} disabled={loading}   >{startIcon}
+        <button onClick={onClick} className={`${varientClasses[varient]} ${defaultStyles}  ${fullWidth ? "w-full" : ""} ${loading ? "opacity-50" : ""}  ${className}`} disabled={loading}   >{startIcon}
             {text}
-        </button>)
+        </button>
+        )
 
 }

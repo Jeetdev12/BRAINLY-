@@ -3,7 +3,6 @@ import { DeleteIcon } from "../../icons/DeleteIcon";
 import { ShareIcon } from "../../icons/ShareIcon";
 import { TwitterIcon } from "../../icons/TwitterIcon";
 import { YoutubeIcon } from "../../icons/YoutubeIcon";
-import { Button } from "./Button";
 import { BACKEND_URL } from "../../utilis/config";
 import { useContent } from "../../hooks/useContent";
 import { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ import { useEffect, useState } from "react";
 interface CardProps {
     title: String,
     link: string,
-    type: "youtube" | "twitter" | "null"
+    type: "youtube" | "twitter" |"document" |"null"
     key: any,
     contentId?: String
 }
@@ -21,7 +20,7 @@ export default function Card({ title, link, type, contentId }: CardProps) {
     const {refresh} = useContent()
 
     const linkId = link.split("/")[3]
-    console.log( contentId)
+    console.log( link.replace("view?usp=sharing", "preview"))
 
 
     useEffect(()=>{
@@ -50,8 +49,8 @@ export default function Card({ title, link, type, contentId }: CardProps) {
     }
 
     return (
-        <div className=" bg-white rounded-md  border-2 border-slate-200 min-h-62 min-w-72 shadow-xl">
-            <div className="flex w-full items-center justify-between    border-b border-gray-200">
+        <div className=" bg-white rounded-md  border-2 border-white min-h-62 min-w-72 shadow-xl">
+            <div className="flex w-full items-center justify-between    border-b border-gray-200 py-2">
 
                 <div className="flex items-center justify-start gap-2 pl-2  text-gray-600">
                     {icons[type]}
@@ -60,7 +59,7 @@ export default function Card({ title, link, type, contentId }: CardProps) {
                     </p>
                 </div>
 
-                <div className="flex items-center justify-end p pr-2 gap-3 text-gray-600">
+                <div className="flex items-center justify-end p pr-2 gap-3 text-gray-600 ">
                     <a href={link} target="_blank">
                         <ShareIcon />
                     </a>
@@ -76,6 +75,9 @@ export default function Card({ title, link, type, contentId }: CardProps) {
                     {type == "twitter" && <blockquote className="twitter-tweet w-full rounded-md border-2 border-gray-200 ">
                         <a href="https://twitter.com/kamleshksingh/status/1959312965741789350"></a>
                     </blockquote>}
+
+                    {type =="document"&&<iframe src={link.replace("view?usp=sharing", "preview")} className="border-none " width="100%" height="100%" ></iframe>
+}
 
 
                 </div>

@@ -95,6 +95,17 @@ app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(
         content
     });
 }));
+//filter content by types
+app.post("/api/v1/filter/type", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const type = req.params.type;
+    const content = yield db_1.ContentModel.find({
+        type: type,
+    }).populate("userId", "username");
+    console.log("filter content:", content);
+    res.json({
+        content
+    });
+}));
 app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const contentId = req.body.contentId;
@@ -108,6 +119,7 @@ app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => __await
         res.status(500).json({ error: error.message });
     }
 }));
+// Share your brain 
 app.post("/api/v1/brain/share", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const share = req.body.share;
     console.log("userId: req.userId", req.userId);

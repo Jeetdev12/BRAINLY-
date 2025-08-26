@@ -57,7 +57,10 @@ export const Dashboard = () => {
         }
       })
 
-    alert(`${FRONTEND_URL}/${response.data.hash}`)
+  await  navigator.clipboard.writeText(`${FRONTEND_URL}/${response.data.hash}`)
+    alert(`link copied : ${FRONTEND_URL}/${response.data.hash}`)
+
+
   }
 
   return (
@@ -65,7 +68,7 @@ export const Dashboard = () => {
       <div className="fixed ">
         <SideBar />
       </div>
-      <div className="min-h-screen p-4  ml-62 bg-gray-100">
+      <div className="min-h-screen p-4 ml-48 md:ml-62 bg-gray-100">
         {/* <Header/> */}
         <CreateContentModal open={modelClose} closeModal={() => setModelClose(false)} />
         <div className="flex items-center justify-end  gap-2">
