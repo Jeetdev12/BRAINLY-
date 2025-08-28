@@ -6,6 +6,7 @@ import { YoutubeIcon } from "../../icons/YoutubeIcon";
 import { BACKEND_URL } from "../../utilis/config";
 import { useContent } from "../../hooks/useContent";
 import { useEffect, useState } from "react";
+import { Document } from "../../icons/Documents";
 
 interface CardProps {
     title: String,
@@ -45,11 +46,12 @@ export default function Card({ title, link, type, contentId }: CardProps) {
 
     let icons: any = {
         "youtube": <YoutubeIcon />,
-        "twitter": <TwitterIcon />
+        "twitter": <TwitterIcon />,
+        "document": <Document/>
     }
 
     return (
-        <div className=" bg-white rounded-md  border-2 border-white min-h-62 min-w-72 shadow-xl">
+        <div className=" bg-white rounded-md  border-2 border-white min-h-62 min-w-72 shadow-2xl">
             <div className="flex w-full items-center justify-between    border-b border-gray-200 py-2">
 
                 <div className="flex items-center justify-start gap-2 pl-2  text-gray-600">
@@ -63,7 +65,7 @@ export default function Card({ title, link, type, contentId }: CardProps) {
                     <a href={link} target="_blank">
                         <ShareIcon />
                     </a>
-                    <button className="bg-white hover:bg-gray-200 p-0 m-0 rounded-full"  onClick={()=>handleDelete(contentId)} > {<DeleteIcon />} </button>
+                    <button className="bg-white cursor-pointer hover:bg-gray-200 p-0 m-0 rounded-full"  onClick={()=>handleDelete(contentId)} > {<DeleteIcon />} </button>
                 </div>
             </div>
 

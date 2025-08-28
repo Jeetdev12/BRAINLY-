@@ -5,6 +5,8 @@ import { YoutubeIcon } from "../../icons/YoutubeIcon";
 import { SidebarItems } from "./SidebarItems";
 import { BACKEND_URL } from "../../utilis/config";
 import { Link } from "react-router-dom";
+import { Document } from "../../icons/Documents";
+import qs from 'qs'
 
 
 
@@ -32,9 +34,11 @@ export default function SideBar() {
         },
       }
     }
+
+    const queryParams = qs.stringify(params)
   try {
         const response: any = await axios.post(
-          `${BACKEND_URL}/api/v1/filter/type?${params}`,
+          `${BACKEND_URL}/api/v1/filter/type?${queryParams}`,
           {
             headers: {
               'Authorization': localStorage.getItem("token")
@@ -59,7 +63,7 @@ export default function SideBar() {
         <div className=" pt-8 pl-6 w-38 text-gray-600 font-semibold">
           <SidebarItems onClick={() => handleClick("twitter")} className="mt-1 pl-2" text="Tweets" icon={<TwitterIcon className="p-0.5" />} />
           <SidebarItems onClick={() => handleClick("youtube")} className="mt-2 pl-2 " text="Youtube" icon={<YoutubeIcon />} />
-          <SidebarItems onClick={() => handleClick("document")} className="mt-2 pl-2 " text="Documents" icon={<YoutubeIcon />} />
+          <SidebarItems onClick={() => handleClick("document")} className="mt-2 pl-2 " text="Documents" icon={<Document />} />
         </div>
       </div>
     )
