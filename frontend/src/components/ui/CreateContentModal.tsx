@@ -52,13 +52,13 @@ export default function CreateContentModal({ open, closeModal }:{open:boolean,cl
                                 <Input placeholder={"Enter link of content "} reference={linkRef} />
                             </div>
                             <div className="grid grid-cols-2">
-                                <Button onClick={() => setType(ContentType.Youtube)} text={"Youtube"} varient={type === ContentType.Youtube ? "Primary" : "Secondary"} startIcon={undefined} />
-                                <Button onClick={() => setType(ContentType.Twitter)} text={"Twitter"} varient={type === ContentType.Twitter ? "Primary" : "Secondary"} startIcon={undefined} />
-                                <Button onClick={() => setType(ContentType.Document)} text={"Document"} varient={type === ContentType.Document ? "Primary" : "Secondary"} startIcon={undefined} />
+                                <Button onClick={() => setType(ContentType.Youtube)} text={"Youtube"} variant={type === ContentType.Youtube ? "Primary" : "Secondary"} startIcon={undefined} />
+                                <Button onClick={() => setType(ContentType.Twitter)} text={"Twitter"} variant={type === ContentType.Twitter ? "Primary" : "Secondary"} startIcon={undefined} />
+                                <Button onClick={() => setType(ContentType.Document)} text={"Document"} variant={type === ContentType.Document ? "Primary" : "Secondary"} startIcon={undefined} />
 
                             </div>
                             <div className="flex justify-center">
-                                <Button onClick={addContent} text={"Submit"} varient="Primary" startIcon={undefined} />
+                                <Button onClick={addContent} text={"Submit"} variant="Primary" startIcon={undefined} />
                             </div>
                         </span>
                     </div>

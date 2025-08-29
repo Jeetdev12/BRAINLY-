@@ -8,12 +8,13 @@ import { ShareIcon } from "../icons/ShareIcon"
 import Card from "../components/ui/Card"
 import axios from "axios"
 import { BACKEND_URL, FRONTEND_URL } from "../utilis/config"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
   const [collection, setCollection] = useState<any>()
   const { contents, refresh } = useContent()
+  const navigate = useNavigate()
   console.log("Contente", contents)
   const params = useParams()
   const { id } = params
@@ -27,6 +28,12 @@ export const Dashboard = () => {
     setCollection(contents)
   }, [contents])
 
+  useEffect(()=>{
+        const token = localStorage.getItem("token");
+        if(!token)(
+           navigate("/signup") 
+        )
+  },[])
 
   async function handleSharedLink() {
     const response = await axios.get(`${BACKEND_URL}/api/v1/brain/:${id}`,
@@ -72,8 +79,10 @@ export const Dashboard = () => {
         {/* <Header/> */}
         <CreateContentModal open={modelClose} closeModal={() => setModelClose(false)} />
         <div className="flex items-center justify-end  gap-2">
-          <Button onClick={() => { setModelClose(true) }} varient="Primary" text={"Add content"} startIcon={<PlusIcon />} />
-          <Button onClick={handleShare} varient="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
+          <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
+          <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
+
+
 
         </div>
         <div className="   pt-4">

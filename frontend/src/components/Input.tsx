@@ -1,14 +1,17 @@
 
 interface ButtonProps{
 placeholder:string ,
-reference:any
+reference:any,
+className?:string,
+type?:string,
+autoComplete?:string,
 }
 
 
-export function Input({ reference, placeholder}:ButtonProps) {
+export function Input({ reference, placeholder,className,type ,autoComplete}:ButtonProps) {
     return (
         <div>
-            <input ref={reference} type="text" className="px-4 py-2 border rounded m-2"  placeholder={placeholder}>
+            <input autoComplete={autoComplete} ref={reference} type={type} className={`px-4 py-2 border rounded m-1 ${className} `}  placeholder={placeholder}>
             </input>
         </div>
     )

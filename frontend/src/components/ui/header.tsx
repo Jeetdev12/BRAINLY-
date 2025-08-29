@@ -10,8 +10,8 @@ export const Header = () => {
             <div className="flex">
                 <span className="text-2xl font-bold">BRAINLY</span>
                 <div className="flex items-center justify-center px-10">
-                <Button varient="Primary" text={"Share"} startIcon={<ShareIcon/>}/>
-                <Button varient="Secondary" text={"Add content"} startIcon={<PlusIcon />}/>
+                <Button variant="Primary" text={"Share"} startIcon={<ShareIcon/>}/>
+                <Button variant="Secondary" text={"Add content"} startIcon={<PlusIcon />}/>
                 </div>
             </div>
 
