@@ -9,16 +9,18 @@ import Card from "../components/ui/Card"
 import axios from "axios"
 import { BACKEND_URL, FRONTEND_URL } from "../utilis/config"
 import { useNavigate, useParams } from "react-router-dom"
+import { UserIcon } from "lucide-react"
 
 export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
   const [collection, setCollection] = useState<any>()
   const { contents, refresh } = useContent()
+  const [showMenu , setShowMenu]  = useState<boolean>(false)
   const navigate = useNavigate()
-  console.log("Contente", contents)
+  // console.log("Contente", contents)
   const params = useParams()
   const { id } = params
-  console.log(params, id)
+  // console.log(params, id)
 
   useEffect(() => {
     refresh()
@@ -31,9 +33,14 @@ export const Dashboard = () => {
   useEffect(()=>{
         const token = localStorage.getItem("token");
         if(!token)(
-           navigate("/signup") 
+           navigate("/signin") 
         )
   },[])
+
+  async function handleUserIconClick(){
+      localStorage.removeItem("token")
+     navigate("/signin")
+  }
 
   async function handleSharedLink() {
     const response = await axios.get(`${BACKEND_URL}/api/v1/brain/:${id}`,
@@ -81,10 +88,16 @@ export const Dashboard = () => {
         <div className="flex items-center justify-end  gap-2">
           <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
           <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
+          <button onClick={()=>setShowMenu(prev=>!prev)} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon/></button>
+
+         
+          </div>
+          {showMenu&& <div className="bg-white absolute mt-2 mx-2 right-0 border border-grey w-32 overflow-hidden  duration-200">
+            <button onClick={handleUserIconClick} className="m-1">Sign out</button>
+            
+          </div>}
 
 
-
-        </div>
         <div className="   pt-4">
           {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
           <div className=" flex flex-wrap mt-2  gap-3">
@@ -99,3 +112,5 @@ export const Dashboard = () => {
     </div>
   )
 }
+
+
