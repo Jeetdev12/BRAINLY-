@@ -90,13 +90,10 @@ export const Dashboard = () => {
           <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
           <button onClick={()=>setShowMenu(prev=>!prev)} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon/></button>
 
-         
           </div>
-          {showMenu&& <div className="bg-white absolute mt-2 mx-2 right-0 border border-grey w-32 overflow-hidden  duration-200">
-            <button onClick={handleUserIconClick} className="m-1">Sign out</button>
-            
+          {showMenu&& <div className="bg-white  absolute  mx-2 right-0 border-2 border-gray-400 w-32 overflow-hidden  duration-200">
+            <button onClick={handleUserIconClick} className="mx-1 text-purple-600 semibold">Sign out</button>            
           </div>}
-
 
         <div className="   pt-4">
           {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
