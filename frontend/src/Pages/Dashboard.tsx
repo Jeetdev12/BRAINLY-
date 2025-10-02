@@ -9,7 +9,7 @@ import Card from "../components/ui/Card"
 import axios from "axios"
 import { BACKEND_URL, FRONTEND_URL } from "../utilis/config"
 import { useNavigate, useParams } from "react-router-dom"
-import { UserIcon } from "lucide-react"
+import UserIcon from "../icons/UserIcon"
 
 export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
@@ -22,12 +22,14 @@ export const Dashboard = () => {
   const { id } = params
   // console.log(params, id)
 
+
   useEffect(() => {
     refresh()
   }, [modelClose])
 
   useEffect(() => {
     setCollection(contents)
+    console.log("contents",contents)
   }, [contents])
 
   useEffect(()=>{
@@ -97,7 +99,7 @@ export const Dashboard = () => {
 
         <div className="   pt-4">
           {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
-          <div className=" flex flex-wrap mt-2  gap-3">
+          <div className=" flex flex-wrap mt-2 min-h-xl gap-3">
             {collection?.map((content: any, index: number) => (
               <Card key={content?._id || index} contentId={content?._id} title={content?.title} link={content.link} type={content.type} />
 
