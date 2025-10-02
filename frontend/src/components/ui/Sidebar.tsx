@@ -1,4 +1,4 @@
-import axios, { type AxiosResponse } from "axios";
+import axios from "axios";
 import { Logo } from "../../icons/Logo";
 import { TwitterIcon } from "../../icons/TwitterIcon";
 import { YoutubeIcon } from "../../icons/YoutubeIcon";
@@ -6,7 +6,7 @@ import { SidebarItems } from "./SidebarItems";
 import { BACKEND_URL } from "../../utilis/config";
 import { Link } from "react-router-dom";
 import { Document } from "../../icons/Documents";
-import qs from 'qs'
+import qs from "qs";
 
 
 
