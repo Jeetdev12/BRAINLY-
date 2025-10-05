@@ -73,10 +73,12 @@ export const Dashboard = () => {
         }
       })
 
-  await  navigator.clipboard.writeText(`${FRONTEND_URL}/${response.data.hash}`)
+      if(!response.data?.hash){
+        alert("No hash is received")
+      }
+
+  await  navigator.clipboard.writeText(`${FRONTEND_URL}/${response?.data?.hash}`)
     alert(`link copied : ${FRONTEND_URL}/${response.data.hash}`)
-
-
   }
 
   return (

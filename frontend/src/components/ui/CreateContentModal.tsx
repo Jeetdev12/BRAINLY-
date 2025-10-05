@@ -12,24 +12,39 @@ enum ContentType {
 }
 
 
-export default function CreateContentModal({ open, closeModal }:{open:boolean,closeModal:()=>void}) {
+export default function CreateContentModal({ open, closeModal }: { open: boolean, closeModal: () => void }) {
     const titleRef = useRef<HTMLInputElement>(null)
     const linkRef = useRef<HTMLInputElement>(null)
     const [type, setType] = useState(ContentType.Youtube)
 
     async function addContent() {
+
+        if(!titleRef || !linkRef) return ;
         const title = titleRef.current?.value;
         const link = linkRef.current?.value;
         console.log(link)
-        const response:any = await axios.post(`${BACKEND_URL}/api/v1/content`, {
-            title,
-            link,
-            type
-        }, {
-            headers: { Authorization: localStorage.getItem("token") }
-        })
-        console.log("response:",response)
-        closeModal()
+
+        try {
+                
+            if(!title || !link) return
+            const response: any = await axios.post(`${BACKEND_URL}/api/v1/content`, {
+                title,
+                link,
+                type
+            }, {
+                headers: { Authorization: localStorage.getItem("token") }
+            })
+
+            if (response.statusText == 'OK') {
+                alert("Content added successfully...")
+            }
+            console.log("response:", response)
+            closeModal()
+
+        } catch (err: any) {
+            console.log("Error occured while adding content ", err.message)
+        }
+
     }
 
     return (
@@ -48,8 +63,8 @@ export default function CreateContentModal({ open, closeModal }:{open:boolean,cl
 
                             </div>
                             <div className="pl-4 w-full pt-2">
-                                <Input placeholder={"Enter title here"} reference={titleRef} />
-                                <Input placeholder={"Enter link of content "} reference={linkRef} />
+                                <Input placeholder={"Enter title here"} reference={titleRef} required/>
+                                <Input placeholder={"Enter link of content "} reference={linkRef} required/>
                             </div>
                             <div className="grid grid-cols-2">
                                 <Button onClick={() => setType(ContentType.Youtube)} text={"Youtube"} variant={type === ContentType.Youtube ? "Primary" : "Secondary"} startIcon={undefined} />

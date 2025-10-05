@@ -35,7 +35,7 @@ export default function Card({ title, link, type, contentId }: CardProps) {
                 }
             });
             console.log("Deleted:", response.data);
-            refresh(); // refresh list after delete
+           await refresh(); // refresh list after delete
         } catch (err) {
             console.error("Delete error:", err);
         } finally {
