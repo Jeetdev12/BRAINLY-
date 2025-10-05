@@ -1,18 +1,15 @@
+import React from "react";
 
-interface ButtonProps{
-placeholder:string ,
-reference:any,
-className?:string,
-type?:string,
-autoComplete?:string,
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  reference?: React.Ref<HTMLInputElement>;
 }
 
-
-export function Input({ reference, placeholder,className,type ,autoComplete}:ButtonProps) {
-    return (
-        <div>
-            <input autoComplete={autoComplete} ref={reference} type={type} className={`px-4 py-2 border rounded m-1 ${className} `}  placeholder={placeholder}>
-            </input>
-        </div>
-    )
+export function Input({ reference, className, ...props }: InputProps) {
+  return (
+    <input
+      ref={reference}
+      className={`px-4 py-2 border rounded m-1 ${className}`}
+      {...props}   // ✅ supports required, type, autoComplete, placeholder, etc.
+    />
+  );
 }
