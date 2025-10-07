@@ -15,6 +15,7 @@ export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
   const [collection, setCollection] = useState<any>()
   const { contents, refresh } = useContent()
+  const [isToken , setIsToken] = useState(false)
   const [showMenu , setShowMenu]  = useState<boolean>(false)
   const navigate = useNavigate()
   // console.log("Contente", contents)
@@ -35,7 +36,7 @@ export const Dashboard = () => {
   useEffect(()=>{
         const token = localStorage.getItem("token");
         if(!token)(
-           navigate("/signin") 
+          setIsToken(true)
         )
   },[])
 
@@ -95,7 +96,7 @@ export const Dashboard = () => {
           <div className="flex items-center gap-2">
           <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
           <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
-          <button onClick={()=>setShowMenu(prev=>!prev)} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon/></button>
+         { isToken?<button onClick={()=>setShowMenu(prev=>!prev)} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon/></button>: <button className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700">Sign in </button>}
             </div>
           </div>
           {showMenu&& <div className="bg-white  absolute  mx-2 right-0 border-2 border-gray-400 w-32 overflow-hidden  duration-200">
@@ -103,7 +104,7 @@ export const Dashboard = () => {
           </div>}
 
 
-        <div className="   pt-4">
+        <div className="pt-4">
           {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
           <div  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
             {collection?.map((content: any, index: number) => (
