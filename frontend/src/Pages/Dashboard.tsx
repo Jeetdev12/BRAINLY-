@@ -43,12 +43,13 @@ export const Dashboard = () => {
       localStorage.removeItem("token")
      navigate("/signin")
   }
+  const token = localStorage.getItem("token")
 
   async function handleSharedLink() {
     const response = await axios.get(`${BACKEND_URL}/api/v1/brain/:${id}`,
       {
         headers: {
-          'Authorization': localStorage.getItem("token")
+          Authorization:`Bearer ${token}`
         }
       })
 
@@ -69,7 +70,7 @@ export const Dashboard = () => {
     },
       {
         headers: {
-          'Authorization': localStorage.getItem("token")
+          Authorization:`Bearer ${token}`
         }
       })
 
@@ -89,19 +90,22 @@ export const Dashboard = () => {
       <div className="min-h-screen p-4 ml-48 md:ml-62 bg-gray-100">
         {/* <Header/> */}
         <CreateContentModal open={modelClose} closeModal={() => setModelClose(false)} />
-        <div className="flex items-center justify-end  gap-2">
+        <div className="flex items-center justify-between  gap-2">
+          <h1 className="text-xl font-bold ">All Notes</h1>
+          <div className="flex items-center gap-2">
           <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
           <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
           <button onClick={()=>setShowMenu(prev=>!prev)} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon/></button>
-
+            </div>
           </div>
           {showMenu&& <div className="bg-white  absolute  mx-2 right-0 border-2 border-gray-400 w-32 overflow-hidden  duration-200">
             <button onClick={handleUserIconClick} className="mx-1 text-purple-600 semibold">Sign out</button>            
           </div>}
 
+
         <div className="   pt-4">
           {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
-          <div className=" flex flex-wrap mt-2 min-h-xl gap-3">
+          <div  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
             {collection?.map((content: any, index: number) => (
               <Card key={content?._id || index} contentId={content?._id} title={content?.title} link={content.link} type={content.type} />
 

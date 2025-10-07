@@ -3,17 +3,26 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 
 export interface AuthRequest extends Request {
-  userID?: string| JwtPayload;
+    userID?: string | JwtPayload;
 }
 
 export const userMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
 
-    const header:any = req.headers["authorization"];
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+        return res.status(401).json({ message: "Token is not available" });
+    }
 
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({ message: "Token format is invalid",
+            response:token
+         });
+    }
 
     try {
-        const decoded = jwt.verify(header, `${process.env.JWT_PASSWORD}`)
-        console.log("token", header, decoded,`${process.env.JWT_PASSWORD}`)
+        const decoded = jwt.verify(token, `${process.env.JWT_PASSWORD}`)
+        console.log("token", token, decoded, `${process.env.JWT_PASSWORD}`)
         if (decoded) {
             console.log((decoded as JwtPayload)._id)
             if (typeof decoded === "string") {

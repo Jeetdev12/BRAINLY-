@@ -9,6 +9,6 @@ const ContentSchema = new Schema({
   type:String,
   tags:[{type:mongoose.Types.ObjectId, ref:'Tags'}],
   userId:{type:mongoose.Types.ObjectId,ref:'user',required:true}
-})
+},{ timestamps: true })
 
 export const ContentModel = model("content",ContentSchema)

@@ -8,7 +8,8 @@ interface ButtonProps {
     onClick?: () => void
     fullWidth?: boolean,
     loading?: boolean
-    className?:String
+    className?:String,
+    disabled?:boolean
 }
 
 const variantClasses = {
@@ -19,9 +20,9 @@ const variantClasses = {
 
 const defaultStyles = "flex gap-2 items-center"
 
-export function Button({ variant, text, startIcon, loading, onClick, fullWidth ,className}: ButtonProps) {
+export function Button({ variant, text, startIcon, loading, onClick, fullWidth ,className,disabled}: ButtonProps) {
     return (
-        <button onClick={onClick} className={`${variantClasses[variant]} ${defaultStyles}  ${fullWidth ? "w-full" : ""} ${loading ? "opacity-50" : ""}  ${className}`} disabled={loading}   >{startIcon}
+        <button disabled={disabled} onClick={onClick} className={`${variantClasses[variant]} ${defaultStyles}  ${fullWidth ? "w-full" : ""} ${loading ? "opacity-50" : ""}  ${className}`} >{startIcon}
             {text}
         </button>
         )

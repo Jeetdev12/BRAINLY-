@@ -34,14 +34,12 @@ export default function SideBar() {
         },
       }
     }
-
     const queryParams = qs.stringify(params)
   try {
         const response: any = await axios.post(
           `${BACKEND_URL}/api/v1/filter/type?${queryParams}`,
           {
-            headers: {
-              'Authorization': localStorage.getItem("token")
+            headers: { Authorization: `Bearer ${token}`
             },
           }
         );
