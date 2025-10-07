@@ -5,11 +5,11 @@ import { Button } from "./Button";
 import axios from "axios";
 import { BACKEND_URL } from "../../utilis/config";
 
-enum ContentType {
-  Youtube = "youtube",
-  Twitter = "twitter",
-  Document = "document",
-}
+export const  ContentType = {
+  Youtube : "youtube",
+  Twitter : "twitter",
+  Document : "document",
+} 
 
 export default function CreateContentModal({
   open,
@@ -20,7 +20,7 @@ export default function CreateContentModal({
 }) {
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
-  const [type, setType] = useState<ContentType>(ContentType.Youtube);
+  const [type, setType] = useState<any>(ContentType.Youtube);
   const [loading, setLoading] = useState(false);
 
   async function addContent() {

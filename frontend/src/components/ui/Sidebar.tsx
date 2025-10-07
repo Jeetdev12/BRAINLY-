@@ -14,10 +14,6 @@ import qs from "qs";
 export default function SideBar() {
 
 
-  interface FilterResponse {
-    success: boolean;
-    data: any;  // you can replace `any` with the actual data type your backend returns
-  }
 
   async function handleClick(type: string): Promise<void> {
     console.log("type side:", type);
