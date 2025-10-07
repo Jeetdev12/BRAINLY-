@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authController_1 = require("../controllers/authController");
+const crudController_1 = require("../controllers/crudController");
+const middleware_1 = require("../middleware/middleware");
+const router = (0, express_1.Router)();
+router.post("/signup", authController_1.signup);
+router.post("/signin", authController_1.signin);
+router.get("/content", middleware_1.userMiddleware, crudController_1.allcontent);
+router.post("/addcontent", middleware_1.userMiddleware, crudController_1.addContent);
+router.get("/filter/type", crudController_1.type);
+router.delete("/delete-content", crudController_1.deleteContent);
+router.post("/brain/share", middleware_1.userMiddleware, crudController_1.shareBrain);
+router.get("/brain/:shareLink", middleware_1.userMiddleware, crudController_1.shareBrainId);
+exports.default = router;

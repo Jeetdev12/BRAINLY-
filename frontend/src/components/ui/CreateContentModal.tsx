@@ -1,88 +1,151 @@
-import { useRef, useState } from "react"
-import CrossIcon from "../../icons/CrossIcon"
-import { Input } from "../Input"
-import { Button } from "./Button"
-import axios from "axios"
-import { BACKEND_URL } from "../../utilis/config"
+import { useRef, useState } from "react";
+import CrossIcon from "../../icons/CrossIcon";
+import { Input } from "../Input";
+import { Button } from "./Button";
+import axios from "axios";
+import { BACKEND_URL } from "../../utilis/config";
 
 enum ContentType {
-    Youtube = "youtube",
-    Twitter = "twitter",
-    Document = "document",
+  Youtube = "youtube",
+  Twitter = "twitter",
+  Document = "document",
 }
 
+export default function CreateContentModal({
+  open,
+  closeModal,
+}: {
+  open: boolean;
+  closeModal: () => void;
+}) {
+  const titleRef = useRef<HTMLInputElement>(null);
+  const linkRef = useRef<HTMLInputElement>(null);
+  const [type, setType] = useState<ContentType>(ContentType.Youtube);
+  const [loading, setLoading] = useState(false);
 
-export default function CreateContentModal({ open, closeModal }: { open: boolean, closeModal: () => void }) {
-    const titleRef = useRef<HTMLInputElement>(null)
-    const linkRef = useRef<HTMLInputElement>(null)
-    const [type, setType] = useState(ContentType.Youtube)
+  async function addContent() {
+    const title = titleRef.current?.value?.trim();
+    const link = linkRef.current?.value?.trim();
+    const token = localStorage.getItem("token");
 
-    async function addContent() {
-
-        if(!titleRef || !linkRef) return ;
-        const title = titleRef.current?.value;
-        const link = linkRef.current?.value;
-        console.log(link)
-
-        try {
-                
-            if(!title || !link) return
-            const response: any = await axios.post(`${BACKEND_URL}/api/v1/content`, {
-                title,
-                link,
-                type
-            }, {
-                headers: { Authorization: localStorage.getItem("token") }
-            })
-
-            if (response.statusText == 'OK') {
-                alert("Content added successfully...")
-            }
-            console.log("response:", response)
-            closeModal()
-
-        } catch (err: any) {
-            console.log("Error occured while adding content ", err.message)
-        }
-
+    if (!title || !link) {
+      alert("Please fill in all fields");
+      return;
     }
 
-    return (
-        <div>
-            {open && <div>
-                <div className="min-h-screen min-w-screen top-0 left-0 fixed bg-slate-500 opacity-60 flex items-center justify-center">
+    if (!token) {
+      alert("You must be logged in to add content");
+      return;
+    }
 
-                </div>
-                <div className="min-h-screen min-w-screen top-0 left-0 fixed flex items-center justify-center">
-                    <div className="flex flex-cols justify-center p-4">
-                        <span className=" bg-white p-2">
-                            <div className="flex justify-end">
-                                <div onClick={closeModal} className="  flex cursor-pointer gap-12  p-1">
-                                    Add Content     <div className="hover:bg-slate-200"><CrossIcon /></div>
-                                </div>
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/addcontent`,
+        { title, link, type },
+        {
+          headers: { authorization: `${token}` }, // lowercase key for Express
+        }
+      );
 
-                            </div>
-                            <div className="pl-4 w-full pt-2">
-                                <Input placeholder={"Enter title here"} reference={titleRef} required/>
-                                <Input placeholder={"Enter link of content "} reference={linkRef} required/>
-                            </div>
-                            <div className="grid grid-cols-2">
-                                <Button onClick={() => setType(ContentType.Youtube)} text={"Youtube"} variant={type === ContentType.Youtube ? "Primary" : "Secondary"} startIcon={undefined} />
-                                <Button onClick={() => setType(ContentType.Twitter)} text={"Twitter"} variant={type === ContentType.Twitter ? "Primary" : "Secondary"} startIcon={undefined} />
-                                <Button onClick={() => setType(ContentType.Document)} text={"Document"} variant={type === ContentType.Document ? "Primary" : "Secondary"} startIcon={undefined} />
+      if (response.status === 200 || response.statusText === "OK") {
+        alert("✅ Content added successfully!");
+        titleRef.current!.value = "";
+        linkRef.current!.value = "";
+        closeModal();
+      }
+    } catch (err: any) {
+      console.error("❌ Error while adding content:", err);
+      alert(err.response?.data?.message || "Error adding content");
+    } finally {
+      setLoading(false);
+    }
+  }
 
-                            </div>
-                            <div className="flex justify-center">
-                                <Button onClick={addContent} text={"Submit"} variant="Primary" startIcon={undefined} />
-                            </div>
-                        </span>
-                    </div>
-                </div>
+  if (!open) return null;
 
-            </div>
-            }
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Background overlay */}
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={closeModal}
+      ></div>
+
+      {/* Modal content */}
+      <div className="relative bg-white rounded-xl shadow-2xl p-6 w-[90%] max-w-md z-10 animate-fadeIn">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Add New Content
+          </h2>
+          <button
+            onClick={closeModal}
+            className="p-1.5 rounded-full hover:bg-gray-100 transition"
+          >
+            <CrossIcon />
+          </button>
         </div>
-    )
+
+        {/* Inputs with Labels */}
+        <div className="space-y-4 mb-4">
+          <div className="flex flex-col text-left">
+            <label className="text-sm font-medium text-gray-600 mb-1">
+              Title
+            </label>
+            <Input
+              placeholder="Enter a descriptive title"
+              reference={titleRef}
+              required
+            />
+          </div>
+
+          <div className="flex flex-col text-left">
+            <label className="text-sm font-medium text-gray-600 mb-1">
+              Link
+            </label>
+            <Input
+              placeholder="Paste your YouTube / Twitter / Document link"
+              reference={linkRef}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Type Selection */}
+        <div className="mb-6">
+          <label className="text-sm font-medium text-gray-600 mb-2 block">
+            Content Type
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              onClick={() => setType(ContentType.Youtube)}
+              text="YouTube"
+              variant={type === ContentType.Youtube ? "Primary" : "Secondary"}
+            />
+            <Button
+              onClick={() => setType(ContentType.Twitter)}
+              text="Twitter"
+              variant={type === ContentType.Twitter ? "Primary" : "Secondary"}
+            />
+            <Button
+              onClick={() => setType(ContentType.Document)}
+              text="Document"
+              variant={type === ContentType.Document ? "Primary" : "Secondary"}
+            />
+          </div>
+        </div>
+
+        {/* Submit */}
+        <div className="flex justify-center">
+          <Button
+            onClick={addContent}
+            text={loading ? "Submitting..." : "Submit"}
+            variant="Primary"
+            disabled={loading}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
-
-

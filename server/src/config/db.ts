@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const dbConnect = ()=>{
-
+ 
+  console.log("dbConnect:",process.env.MONGODB_URL)
     
 mongoose.connect(`${process.env.MONGODB_URL}`)
-  .then(() => {
+  .then((response) => {
     console.log("✅ MongoDB connected");
 
     // Only start the server AFTER DB connection

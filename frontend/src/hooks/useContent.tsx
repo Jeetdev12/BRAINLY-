@@ -6,14 +6,14 @@ import { useEffect, useState } from "react";
 
 export function useContent() {
     const [contents, setContent] = useState<any>([])
-
+    const token = localStorage.getItem("token");
 
     async function refresh() {
         try {
             const response = await axios.get(`${BACKEND_URL}/api/v1/content`, {
-                headers: { Authorization: localStorage.getItem("token") }
+                headers: { Authorization: `Bearer ${token}`  }
             })
-            setContent(response.data.content)
+            setContent(response.data?.content)
         } catch (error: any) {
             return error.message
         }
