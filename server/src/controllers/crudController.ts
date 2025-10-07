@@ -48,7 +48,7 @@ export const allcontent = async (_req: AuthRequest, res: Response) => {
 export const type = async (req: AuthRequest, res: Response) => {
   console.log("Entering in filter..")
   try {
-    const content = await ContentModel.find({ type: 'document' })
+    const content = await ContentModel.find({ type: req.params.type })
     res.json({ content });
   } catch (error: any) {
     res.status(500).json({ message: `Error filtering content: ${error.message}` });
