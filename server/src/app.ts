@@ -12,15 +12,21 @@ dotenv.config();
 const startServer = async () => {
 await dbConnect();
 
+
+const allowedOrigins = ['http://localhost:5173', 'https://brainly-fawn.vercel.app'];
 app.use(cors({
-  origin: ["https://brainly-f9lo.onrender.com","https://brainly-fawn.vercel.app/"],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'authorization', 'Cookie']
 }));
 app.use(express.json())
-
-
-
 
 app.use("/api/v1",routes);
 }
