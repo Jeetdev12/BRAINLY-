@@ -43,7 +43,7 @@ export const Dashboard = () => {
   async function handleUserIconClick() {
     localStorage.removeItem("token")
     setIsToken(false)
-    // navigate("/signin")
+    navigate("/signin")
   }
   const token = localStorage.getItem("token")
 
