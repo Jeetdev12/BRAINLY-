@@ -4,7 +4,6 @@ import { TwitterIcon } from "../../icons/TwitterIcon";
 import { YoutubeIcon } from "../../icons/YoutubeIcon";
 import { SidebarItems } from "./SidebarItems";
 import { BACKEND_URL } from "../../utilis/config";
-import { Link } from "react-router-dom";
 import { Document } from "../../icons/Documents";
 import qs from "qs";
 
@@ -12,7 +11,6 @@ import qs from "qs";
 
 
 export default function SideBar() {
-
 
 
   async function handleClick(type: string): Promise<void> {
@@ -51,7 +49,7 @@ export default function SideBar() {
     return (
       <div className="min-h-screen bg-white border-r-2 border-gray-200 w-48 md:w-62 top-0 left-0  pt-4">
         <div className="flex items-center  pl-6 text-2xl  ">
-          <div className="text-purple-600 "><Link to="/"><Logo /></Link></div>
+          <div className="text-purple-600 "><a href="/"><Logo /></a></div>
           <h1 className="font-semibold pl-2 ">Brainly</h1>
         </div>
         <div className=" pt-8 pl-6 w-38 text-gray-600 font-semibold">
