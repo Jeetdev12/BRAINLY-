@@ -6,6 +6,7 @@ dotenv.config();
 
 const LinkSchema = new Schema({
   hash:String, 
+  share:Boolean,
   userId: {type: mongoose.Types.ObjectId, ref: 'User', required: true, unique: true}
   
 })

@@ -15,8 +15,8 @@ export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
   const [collection, setCollection] = useState<any>()
   const { contents, refresh } = useContent()
-  const [isToken , setIsToken] = useState(false)
-  const [showMenu , setShowMenu]  = useState<boolean>(false)
+  const [isToken, setIsToken] = useState(false)
+  const [showMenu, setShowMenu] = useState<boolean>(false)
   const navigate = useNavigate()
   // console.log("Contente", contents)
   const params = useParams()
@@ -30,19 +30,20 @@ export const Dashboard = () => {
 
   useEffect(() => {
     setCollection(contents)
-    console.log("contents",contents)
+    console.log("contents", contents)
   }, [contents])
 
-  useEffect(()=>{
-        const token = localStorage.getItem("token");
-        if(!token)(
-          setIsToken(true)
-        )
-  },[])
+  useEffect(() => {
+    const token:any = localStorage.getItem("token");
+    
+     token? setIsToken(true):''
+    
+  }, [])
 
-  async function handleUserIconClick(){
-      localStorage.removeItem("token")
-     navigate("/signin")
+  async function handleUserIconClick() {
+    localStorage.removeItem("token")
+    setIsToken(false)
+    // navigate("/signin")
   }
   const token = localStorage.getItem("token")
 
@@ -50,7 +51,7 @@ export const Dashboard = () => {
     const response = await axios.get(`${BACKEND_URL}/api/v1/brain/:${id}`,
       {
         headers: {
-          Authorization:`Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       })
 
@@ -65,21 +66,27 @@ export const Dashboard = () => {
   }, [id])
 
 
+  function handleClick(){
+    setShowMenu((prev) => !prev)
+
+
+  }
+
   async function handleShare() {
     const response = await axios.post(`${BACKEND_URL}/api/v1/brain/share`, {
       share: true
     },
       {
         headers: {
-          Authorization:`Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       })
 
-      if(!response.data?.hash){
-        alert("No hash is received")
-      }
+    if (!response.data?.hash) {
+      alert("No hash is received")
+    }
 
-  await  navigator.clipboard.writeText(`${FRONTEND_URL}/${response?.data?.hash}`)
+    await navigator.clipboard.writeText(`${FRONTEND_URL}/${response?.data?.hash}`)
     alert(`link copied : ${FRONTEND_URL}/${response.data.hash}`)
   }
 
@@ -94,19 +101,20 @@ export const Dashboard = () => {
         <div className="flex items-center justify-between  gap-2">
           <h1 className="text-xl font-bold ">All Notes</h1>
           <div className="flex items-center gap-2">
-          <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
-          <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
-         { isToken?<button onClick={()=>setShowMenu(prev=>!prev)} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon/></button>: <button className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700">Sign in </button>}
-            </div>
+            <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
+            <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
+
+            {isToken ? <button onClick={handleClick} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon /></button> :<a href="/signin"> <button  className="flex size-10 cursor-pointer items-center justify-center rounded-sm bg-gradient-to-b from-purple-400 to-purple-700">Sign in </button></a>}
           </div>
-          {showMenu&& <div className="bg-white  absolute  mx-2 right-0 border-2 border-gray-400 w-32 overflow-hidden  duration-200">
-            <button onClick={handleUserIconClick} className="mx-1 text-purple-600 semibold">Sign out</button>            
-          </div>}
+        </div>
+        {showMenu && <div onClick={handleClick } className="bg-white  absolute  mx-2 right-0 border-2 border-gray-400 w-32 overflow-hidden  duration-200">
+          <button onClick={handleUserIconClick} className="mx-1 text-purple-600 semibold">Sign out</button>
+        </div>}
 
 
         <div className="pt-4">
           {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
-          <div  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
             {collection?.map((content: any, index: number) => (
               <Card key={content?._id || index} contentId={content?._id} title={content?.title} link={content.link} type={content.type} />
 

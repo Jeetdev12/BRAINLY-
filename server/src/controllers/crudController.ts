@@ -5,7 +5,7 @@ import { random } from "../utils";
 import { UserModel } from "../models/userModel";
 import { AuthRequest } from "../middleware/middleware";
 
-// 🟢 Add Content
+// Add Content
 export const addContent = async (req: AuthRequest, res: Response) => {
   const { link, type } = req.body;
   const userId = req.userId;
@@ -31,7 +31,7 @@ export const addContent = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 🟢 Fetch all content
+//  Fetch all content
 export const allcontent = async (_req: AuthRequest, res: Response) => {
   try {
     const content = await ContentModel.find();
@@ -44,7 +44,7 @@ export const allcontent = async (_req: AuthRequest, res: Response) => {
   }
 };
 
-// 🟢 Filter by type
+//  Filter by type
 export const type = async (req: AuthRequest, res: Response) => {
   console.log("Entering in filter..")
   try {
@@ -55,7 +55,7 @@ export const type = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 🟢 Delete content
+//  Delete content
 export const deleteContent = async (req: AuthRequest, res: Response) => {
   try {
     const { contentId } = req.body;
@@ -75,23 +75,25 @@ export const deleteContent = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 🟢 Share brain (generate/delete link)
+//  Share brain (generate/delete link)
 export const shareBrain = async (req: AuthRequest, res: Response) => {
   try {
     const { share } = req.body;
     const userId = req.userId;
 
-    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    if (!userId) return res.status(401).json({ message: "Access denied" });
 
     if (share) {
       const existingLink = await LinkModel.findOne({ userId });
 
-      if (existingLink) {
-        return res.json({ hash: existingLink.hash });
+      if (!existingLink) {
+        return res.json({
+          message:"Link is wrong "
+         });
       }
 
       const hash = random(10);
-      await LinkModel.create({ userId, hash });
+      await LinkModel.create({ userId, hash ,share:true});
       res.json({ hash });
     } else {
       await LinkModel.deleteOne({ userId });
@@ -102,11 +104,11 @@ export const shareBrain = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 🟢 Share brain via link ID
+//  Share brain via link ID
 export const shareBrainId = async (req: AuthRequest, res: Response) => {
   try {
     const hash = req.params.shareLink;
-    const link = await LinkModel.findOne({ hash });
+    const link = await LinkModel.findOne({ hash ,});
 
     if (!link) {
       return res.status(404).json({ message: "Invalid share link" });

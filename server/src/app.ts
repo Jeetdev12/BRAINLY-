@@ -13,7 +13,7 @@ const startServer = async () => {
 await dbConnect();
 
 app.use(cors({
-  origin: ["https://brainly-f9lo.onrender.com","http://localhost:5173", "http://localhost:3000"],
+  origin: ["https://brainly-f9lo.onrender.com","https://brainly-fawn.vercel.app/"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));

@@ -71,6 +71,7 @@ export default function SignIn() {
           </div>
 
           <Button
+          type="submit"
             onClick={signIn}
             loading={loading}
             variant="none"
@@ -80,11 +81,11 @@ export default function SignIn() {
           />
         </div>
 
-        <div className="text-center mt-4">
-          <a href="/signup" className="text-purple-600 hover:underline">
-            Don’t have an account? Sign up
-          </a>
-        </div>
+          <div className="text-center mt-4">
+            <a href="/signup" className="text-purple-600">
+              Don’t have an account? Sign up
+            </a>
+          </div>
       </div>
     </div>
   );
