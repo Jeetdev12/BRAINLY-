@@ -29,13 +29,15 @@ app.use(cors({
 app.use(express.json())
 
 app.use("/api/v1",routes);
+
+app.listen(process.env.PORT,()=>{
+  console.log("Server is runing")
+})
 }
 
 
 startServer()
-app.listen(process.env.PORT,()=>{
-  console.log("Server is runing")
-})
+
 
 // app.post("/api/v1/signup", async (req, res) => {
 //   console.log("signup route hitted..");
