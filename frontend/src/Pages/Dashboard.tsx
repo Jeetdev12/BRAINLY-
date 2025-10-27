@@ -10,6 +10,7 @@ import axios from "axios"
 import { BACKEND_URL, FRONTEND_URL } from "../utilis/config"
 import { useNavigate, useParams } from "react-router-dom"
 import UserIcon from "../icons/UserIcon"
+import { NoNotes } from "../components/NoNotes"
 
 export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
@@ -121,6 +122,8 @@ export const Dashboard = () => {
             ))}
           </div>
         </div>
+
+        {collection ?'': <NoNotes/>}
 
       </div>
     </div>
