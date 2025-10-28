@@ -42,6 +42,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const LinkSchema = new mongoose_1.Schema({
     hash: String,
+    share: Boolean,
     userId: { type: mongoose_1.default.Types.ObjectId, ref: 'User', required: true, unique: true }
 });
 exports.LinkModel = (0, mongoose_1.model)("Links", LinkSchema);

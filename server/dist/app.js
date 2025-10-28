@@ -12,18 +12,27 @@ const routes_1 = __importDefault(require("./routes/routes"));
 dotenv_1.default.config();
 const startServer = async () => {
     await (0, db_1.default)();
+    const allowedOrigins = ['http://localhost:5173', 'https://brainly-fawn.vercel.app'];
     app.use((0, cors_1.default)({
-        origin: ["http://localhost:5173", "http://localhost:3000"],
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            }
+            else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'authorization', 'Cookie']
     }));
     app.use(express_1.default.json());
     app.use("/api/v1", routes_1.default);
+    app.listen(process.env.PORT, () => {
+        console.log("Server is runing");
+    });
 };
 startServer();
-app.listen(process.env.PORT, () => {
-    console.log("Server is runing");
-});
 // app.post("/api/v1/signup", async (req, res) => {
 //   console.log("signup route hitted..");
 //   try {
