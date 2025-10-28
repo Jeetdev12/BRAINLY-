@@ -3,8 +3,6 @@ import CrossIcon from "../../icons/CrossIcon";
 import { Input } from "../Input";
 import { Button } from "./Button";
 import axios from "axios";
-import { BACKEND_URL } from "../../utilis/config";
-
 export const  ContentType = {
   Youtube : "youtube",
   Twitter : "twitter",
@@ -41,7 +39,7 @@ export default function CreateContentModal({
     try {
       setLoading(true);
       const response = await axios.post(
-        `${BACKEND_URL}/api/v1/addcontent`,
+        `${process.env.BACKEND_URL}/api/v1/addcontent`,
         { title, link, type },
         {
           headers: { authorization: `${token}` }, // lowercase key for Express

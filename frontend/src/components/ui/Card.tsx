@@ -3,7 +3,6 @@ import { DeleteIcon } from "../../icons/DeleteIcon";
 import { ShareIcon } from "../../icons/ShareIcon";
 import { TwitterIcon } from "../../icons/TwitterIcon";
 import { YoutubeIcon } from "../../icons/YoutubeIcon";
-import { BACKEND_URL } from "../../utilis/config";
 import { useContent } from "../../hooks/useContent";
 import { useEffect, useState, type JSX } from "react";
 import { Document } from "../../icons/Documents";

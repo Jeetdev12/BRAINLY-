@@ -3,7 +3,6 @@ import { Logo } from "../../icons/Logo";
 import { TwitterIcon } from "../../icons/TwitterIcon";
 import { YoutubeIcon } from "../../icons/YoutubeIcon";
 import { SidebarItems } from "./SidebarItems";
-import { BACKEND_URL } from "../../utilis/config";
 import { Document } from "../../icons/Documents";
 import qs from "qs";
 
@@ -31,7 +30,7 @@ export default function SideBar() {
     const queryParams = qs.stringify(params)
   try {
         const response: any = await axios.post(
-          `${BACKEND_URL}/api/v1/filter/type?${queryParams}`,
+          `${process.env.BACKEND_URL}/api/v1/filter/type?${queryParams}`,
           {
             headers: { Authorization: `Bearer ${token}`
             },
