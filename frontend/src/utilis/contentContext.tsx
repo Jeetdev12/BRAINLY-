@@ -22,14 +22,14 @@ const ContentContext = createContext<ContentContextType | undefined>(undefined);
 export function ContentProvider({ children }: { children: ReactNode }) {
   const [contents, setContents] = useState<Content[]>([]);
   const [type, setType] = useState<string>("");
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
 
   const token = localStorage.getItem("token");
 
   async function refresh() {
     try {
-      setLoading(true);
+    //   setLoading(true);
       console.log("type2", type)
       const url = type
         ? `${import.meta.env.VITE_BACKEND_URL}/api/v1/filter/type?type=${type}`
@@ -43,7 +43,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     } catch (err: any) {
       console.error("Error fetching content:", err.message);
     } finally {
-      setLoading(false);
+    //   setLoading(false);
     }
   }
   useEffect(() => {

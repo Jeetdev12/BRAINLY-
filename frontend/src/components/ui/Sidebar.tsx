@@ -3,10 +3,8 @@ import { TwitterIcon } from "../../icons/TwitterIcon";
 import { YoutubeIcon } from "../../icons/YoutubeIcon";
 import { SidebarItems } from "./SidebarItems";
 import { Document } from "../../icons/Documents";
-import { useContent } from "../../hooks/useContent";
 
 export default function SideBar() {
-  const { type } = useContent();
 
   return (
     <div className="min-h-screen bg-white border-r-2 border-gray-200 w-48 md:w-62 top-0 left-0 pt-4 sticky">
