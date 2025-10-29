@@ -38,7 +38,7 @@ const userMiddleware = (req, res, next) => {
         }
     }
     catch (err) {
-        res.json(403).json({ message: err.message });
+        res.status(403).json({ message: err.message });
     }
 };
 exports.userMiddleware = userMiddleware;

@@ -46,12 +46,21 @@ export const allcontent = async (_req: AuthRequest, res: Response) => {
 
 //  Filter by type
 export const type = async (req: AuthRequest, res: Response) => {
-  console.log("Entering in filter..")
+
   try {
-    const content = await ContentModel.find({ type: req.params.type })
-    res.json({ content });
+    console.log("Req info in type : ", req)
+    const { type } = req.query;
+    const content = await ContentModel.find({ type })
+    res.status(200).json({
+       success: true,
+        content, 
+        message: `${type} content fetched successfully`
+      });
+
   } catch (error: any) {
-    res.status(500).json({ message: `Error filtering content: ${error.message}` });
+    res.status(500).json({ success: false,
+       message: `Error filtering content: ${error.message}`
+       });
   }
 };
 
@@ -88,12 +97,12 @@ export const shareBrain = async (req: AuthRequest, res: Response) => {
 
       if (!existingLink) {
         return res.json({
-          message:"Link is wrong "
-         });
+          message: "Link is wrong "
+        });
       }
 
       const hash = random(10);
-      await LinkModel.create({ userId, hash ,share:true});
+      await LinkModel.create({ userId, hash, share: true });
       res.json({ hash });
     } else {
       await LinkModel.deleteOne({ userId });
@@ -108,7 +117,7 @@ export const shareBrain = async (req: AuthRequest, res: Response) => {
 export const shareBrainId = async (req: AuthRequest, res: Response) => {
   try {
     const hash = req.params.shareLink;
-    const link = await LinkModel.findOne({ hash ,});
+    const link = await LinkModel.findOne({ hash, });
 
     if (!link) {
       return res.status(404).json({ message: "Invalid share link" });

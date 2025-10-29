@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 
 export interface AuthRequest extends Request {
-    userID?: string | JwtPayload;
+    userId?: string ;
 }
 
 export const userMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -40,7 +40,7 @@ export const userMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
             })
         }
     } catch (err: any) {
-        res.json(403).json({ message: err.message })
+        res.status(403).json({ message: err.message })
     }
 
 

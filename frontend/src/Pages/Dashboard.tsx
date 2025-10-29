@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useContent } from "../hooks/useContent"
 import SideBar from "../components/ui/Sidebar"
 import CreateContentModal from "../components/ui/CreateContentModal"
 import { PlusIcon } from "../icons/PlusIcons"
@@ -11,10 +10,11 @@ import { BACKEND_URL, FRONTEND_URL } from "../utilis/config"
 import { useNavigate, useParams } from "react-router-dom"
 import UserIcon from "../icons/UserIcon"
 import { NoNotes } from "../components/NoNotes"
+import { useContent } from "../utilis/contentContext"
 
 export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
-  const [collection, setCollection] = useState<any>()
+  // const [collection, setCollection] = useState<any>()
   const { contents, refresh } = useContent()
   const [isToken, setIsToken] = useState(false)
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -29,17 +29,19 @@ export const Dashboard = () => {
     refresh()
   }, [modelClose])
 
-  useEffect(() => {
-    setCollection(contents)
-    console.log("contents", contents)
-  }, [contents])
+  // useEffect(() => {
+  //   // setCollection(contents)
+  //   console.log("contents", collection)
+  // }, [collection,contents])
 
   useEffect(() => {
-    const token:any = localStorage.getItem("token");
-    
-     token? setIsToken(true):''
-    
+    const token: any = localStorage.getItem("token");
+
+    token ? setIsToken(true) : ''
+
   }, [])
+
+
 
   async function handleUserIconClick() {
     localStorage.removeItem("token")
@@ -67,7 +69,7 @@ export const Dashboard = () => {
   }, [id])
 
 
-  function handleClick(){
+  function handleClick() {
     setShowMenu((prev) => !prev)
 
 
@@ -105,10 +107,10 @@ export const Dashboard = () => {
             <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
             <Button onClick={handleShare} variant="Secondary" text={"Share Brain"} startIcon={<ShareIcon />} />
 
-            {isToken ? <button onClick={handleClick} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon /></button> :<a href="/signin"> <button  className="flex size-10 cursor-pointer items-center justify-center rounded-sm bg-gradient-to-b from-purple-400 to-purple-700">Sign in </button></a>}
+            {isToken ? <button onClick={handleClick} className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-purple-400 to-purple-700"><UserIcon /></button> : <a href="/signin"> <button className="flex size-10 cursor-pointer items-center justify-center rounded-sm bg-gradient-to-b from-purple-400 to-purple-700">Sign in </button></a>}
           </div>
         </div>
-        {showMenu && <div onClick={handleClick } className="bg-white  absolute  mx-2 right-0 border-2 border-gray-400 w-32 overflow-hidden  duration-200">
+        {showMenu && <div onClick={handleClick} className="bg-white  absolute  mx-2 right-0 border-2 border-gray-400 w-32 overflow-hidden  duration-200">
           <button onClick={handleUserIconClick} className="mx-1 text-purple-600 semibold">Sign out</button>
         </div>}
 
@@ -116,14 +118,14 @@ export const Dashboard = () => {
         <div className="pt-4">
           {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {collection?.map((content: any, index: number) => (
+            {contents?contents?.map((content: any, index: number) => (
               <Card key={content?._id || index} contentId={content?._id} title={content?.title} link={content.link} type={content.type} />
 
-            ))}
+            )):<NoNotes />}
           </div>
         </div>
 
-        {collection ?'': <NoNotes/>}
+        {contents ? '' : <NoNotes />}
 
       </div>
     </div>

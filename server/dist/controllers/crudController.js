@@ -45,13 +45,20 @@ const allcontent = async (_req, res) => {
 exports.allcontent = allcontent;
 //  Filter by type
 const type = async (req, res) => {
-    console.log("Entering in filter..");
     try {
-        const content = await contentModel_1.ContentModel.find({ type: req.params.type });
-        res.json({ content });
+        console.log("Req info in type : ", req);
+        const { type } = req.query;
+        const content = await contentModel_1.ContentModel.find({ type });
+        res.status(200).json({
+            success: true,
+            content,
+            message: `${type} content fetched successfully`
+        });
     }
     catch (error) {
-        res.status(500).json({ message: `Error filtering content: ${error.message}` });
+        res.status(500).json({ success: false,
+            message: `Error filtering content: ${error.message}`
+        });
     }
 };
 exports.type = type;

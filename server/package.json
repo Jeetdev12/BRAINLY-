@@ -4,8 +4,8 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc",
+    "dev": "nodemon src/app.ts",
     "start": "node dist/app.js"
-   
   },
   "keywords": [],
   "author": "",

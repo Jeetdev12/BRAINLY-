@@ -39,7 +39,7 @@ export default function CreateContentModal({
     try {
       setLoading(true);
       const response = await axios.post(
-        `${process.env.BACKEND_URL}/api/v1/addcontent`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/addcontent`,
         { title, link, type },
         {
           headers: { authorization: `${token}` }, // lowercase key for Express

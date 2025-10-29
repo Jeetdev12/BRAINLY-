@@ -1,14 +1,16 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import dbConnect from "./config/db.js";
-import routes from "./routes/routes.js";
+import dbConnect from "./config/db";
+import routes from "./routes/routes";
+
 
 dotenv.config();
 const app = express();
 
 const startServer = async () => {
-  await dbConnect();
+  console.log("✅ Routes type:", typeof routes);
+  await dbConnect()
 
   // ✅ Simple and safe CORS setup
   app.use(
@@ -23,14 +25,10 @@ const startServer = async () => {
   );
 
   // ✅ Handle preflight manually for safety (important for Render)
-  app.options("*", cors());
+  app.options("", cors());
 
   app.use(express.json());
   app.use("/api/v1", routes);
-
-  app.get("/", (req, res) => {
-    res.send("Server running fine!");
-  });
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

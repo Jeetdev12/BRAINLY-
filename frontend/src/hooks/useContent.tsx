@@ -1,35 +1,70 @@
 import axios from "axios";
-import { BACKEND_URL } from "../utilis/config";
 import { useEffect, useState } from "react";
 
+export interface Content {
+  _id: string;
+  title: string;
+  link: string;
+  type: string;
+  userId: string;
+  tags: string[];
+  __v?: number;
+}
 
+export interface UseContentResult {
+  contents: Content[];
+  loading: boolean;
+  error: string | null;
+  refresh: () => Promise<void>;
+}
 
 export function useContent() {
-    const [contents, setContent] = useState<any>([])
-    const token = localStorage.getItem("token");
+  const [contents, setContents] = useState<Content[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+   const [collection, setCollection] = useState<any>([])
+  const [type, setType] = useState<any>()
 
-    async function refresh() {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/api/v1/content`, {
-                headers: { Authorization: `Bearer ${token}`  }
-            })
-            setContent(response.data?.content)
-        } catch (error: any) {
-            return error.message
-        }
+
+  const token = localStorage.getItem("token");
+
+  const fetchContent = async () => {
+    if (!token) {
+      setError("No token found, please login first.");
+      setLoading(false);
+      return;
     }
 
-    useEffect(() => {
-        refresh()
-        // let Interval = setInterval(() => {
-        //     refresh()
-        // }, 10 * 1000)
+    try {
+      setLoading(true);
+      console.log("type2", type)
+      const url = type
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/v1/filter/type?type=${type}`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/v1/content`;
 
-        // return () => {
-        //     clearInterval(Interval);
-        // }
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(response)
+      setContents(response.data.content || []);
+      setError(null);
+    } catch (err: any) {
+      console.error("Error fetching content:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    }, [])
+  useEffect(() => {
+    setCollection(contents)
+    console.log("contentsuse", contents)
+  }, [contents])
 
-    return { contents, refresh }
+  useEffect(() => {
+    fetchContent();
+    console.log("settype", type)
+  }, [type]);
+
+  return {collection, contents, loading, error, type, setType, refresh: fetchContent };
 }

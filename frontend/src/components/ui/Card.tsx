@@ -32,7 +32,7 @@ export default function Card({ title, link, type, contentId }: CardProps) {
         if (!contentId) return;
         try {
             setLoading(true);
-            const response = await axios.delete(`${process.env.BACKEND_URL}/api/v1/delete-content`, {
+            const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/v1/delete-content`, {
                 data: { contentId },
                 headers: {
                     Authorization: `Bearer ${token}`
