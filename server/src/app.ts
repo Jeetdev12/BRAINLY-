@@ -16,6 +16,7 @@ const startServer = async () => {
   app.use(
     cors({
       origin: [
+        `${process.env.ORIGIN_URL}`,
         "http://localhost:5173",
         "https://brainly-fawn.vercel.app",
       ],
@@ -25,7 +26,7 @@ const startServer = async () => {
   );
 
   // ✅ Handle preflight manually for safety (important for Render)
-  app.options("", cors());
+  app.options("/any", cors());
 
   app.use(express.json());
   app.use("/api/v1", routes);
