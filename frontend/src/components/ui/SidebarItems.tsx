@@ -4,7 +4,7 @@ import { useContent } from "../../utilis/contentContext";
 
 interface SidebarItemProps {
     text: string;
-    icon: ReactElement;
+    icon?: ReactElement;
     className?: string;
     ContentType: string;
 }

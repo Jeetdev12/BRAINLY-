@@ -24,7 +24,7 @@ export function NoNotes() {
             </div>
             <h2 className="text-3xl font-bold text-gray-700 mb-2">No Notes to Show</h2>
             <p className="text-gray-500 mb-6 max-w-md">No notes found for the selected category. Try selecting a different category or add new content.</p>
-            <Button startIcon={<Plus />} text={"Add Content"} variant={"none"} onClick={() => { setModelClose(true) }} 
+            <Button className={"bg-gray-300 p-2 rounded-sm hover:cursor-pointer hover:bg-gray-400"} startIcon={<Plus />} text={"Add Content"} variant={"none"} onClick={() => { setModelClose(true) }} 
              />
         </div>
     </div>

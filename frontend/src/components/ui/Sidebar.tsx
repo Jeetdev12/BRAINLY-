@@ -16,6 +16,8 @@ export default function SideBar() {
       </div>
 
       <div className="pt-8 pl-6 w-38 text-gray-600 font-semibold">
+
+        <SidebarItems className="mt-1 pl-12 flex items-center justified-center hover:bg-gray-200 hover:text-purple-600 hover:cursor-pointer transition-colors " text={"All"}  ContentType={""}/>
         <SidebarItems
           
           className="mt-1 pl-2 hover:bg-gray-200 hover:text-purple-600 hover:cursor-pointer transition-colors"

@@ -11,15 +11,17 @@ import { useNavigate, useParams } from "react-router-dom"
 import UserIcon from "../icons/UserIcon"
 import { NoNotes } from "../components/NoNotes"
 import { useContent } from "../utilis/contentContext"
+import { Loader2 } from "lucide-react"
+import type { text } from "stream/consumers"
 
 export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
   // const [collection, setCollection] = useState<any>()
-  const { contents, refresh } = useContent()
+  const { loading, contents, refresh } = useContent()
   const [isToken, setIsToken] = useState(false)
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const navigate = useNavigate()
-  // console.log("Contente", contents)
+  console.log("Contente dasbor", contents)
   const params = useParams()
   const { id } = params
   // console.log(params, id)
@@ -93,6 +95,7 @@ export const Dashboard = () => {
     alert(`link copied : ${FRONTEND_URL}/${response.data.hash}`)
   }
 
+
   return (
     <div className="w-screen">
       <div className="fixed ">
@@ -115,17 +118,29 @@ export const Dashboard = () => {
         </div>}
 
 
-        <div className="pt-4">
-          {/* <Card key={1} title={"Mauj karenge"} link={"23333334"} type={"twitter"} /> */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {contents?contents?.map((content: any, index: number) => (
-              <Card key={content?._id || index} contentId={content?._id} title={content?.title} link={content.link} type={content.type} />
-
-            )):<NoNotes />}
-          </div>
+        <div className=" flex items-center justify-center ">
+          {loading ? (
+            <div className="flex flex-col items-center justify-center h-screen">
+              <Loader2 className="animate-spin text-gray-600 w-10 h-10 mb-2" />
+              <p className="text-gray-600 dark:text-gray-200 animate-pulse">Loading...</p>
+            </div>
+          ) : contents.length === 0 ? (
+            <NoNotes />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+              {contents.map((content: any, index: number) => (
+                <Card
+                  key={content?._id || index}
+                  contentId={content?._id}
+                  title={content?.title}
+                  link={content.link}
+                  type={content.type}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {contents ? '' : <NoNotes />}
 
       </div>
     </div>
