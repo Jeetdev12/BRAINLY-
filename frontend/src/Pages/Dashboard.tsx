@@ -12,7 +12,6 @@ import UserIcon from "../icons/UserIcon"
 import { NoNotes } from "../components/NoNotes"
 import { useContent } from "../utilis/contentContext"
 import { Loader2 } from "lucide-react"
-import type { text } from "stream/consumers"
 
 export const Dashboard = () => {
   const [modelClose, setModelClose] = useState<any>(false)
