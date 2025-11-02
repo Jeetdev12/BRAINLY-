@@ -6,7 +6,7 @@ import { Button } from "../components/ui/Button"
 import { ShareIcon } from "../icons/ShareIcon"
 import Card from "../components/ui/Card"
 import axios from "axios"
-import { BACKEND_URL, FRONTEND_URL } from "../utilis/config"
+import {FRONTEND_URL } from "../utilis/config"
 import { useNavigate, useParams } from "react-router-dom"
 import UserIcon from "../icons/UserIcon"
 import { NoNotes } from "../components/NoNotes"
@@ -29,7 +29,7 @@ export const Dashboard = () => {
   useEffect(() => {
     refresh()
   }, [modelClose])
-
+   console.log("Dasboard console:",contents)
   // useEffect(() => {
   //   // setCollection(contents)
   //   console.log("contents", collection)
@@ -52,7 +52,7 @@ export const Dashboard = () => {
   const token = localStorage.getItem("token")
 
   async function handleSharedLink() {
-    const response = await axios.get(`${BACKEND_URL}/api/v1/brain/:${id}`,
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/brain/:${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -77,7 +77,7 @@ export const Dashboard = () => {
   }
 
   async function handleShare() {
-    const response = await axios.post(`${BACKEND_URL}/api/v1/brain/share`, {
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/brain/share`, {
       share: true
     },
       {
@@ -132,7 +132,7 @@ export const Dashboard = () => {
                   key={content?._id || index}
                   contentId={content?._id}
                   title={content?.title}
-                  link={content.link}
+                  link={content.link?content.link:content.content}
                   type={content.type}
                 />
               ))}

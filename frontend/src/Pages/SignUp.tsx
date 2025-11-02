@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BACKEND_URL } from "../utilis/config";
 import { Input } from "../components/Input";
 import { Button } from "../components/ui/Button";
 
@@ -26,7 +25,7 @@ export default function SignUp() {
 
         try {
             setLoading(true);
-            await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/signup`, {
                 username,
                 email,
                 password,

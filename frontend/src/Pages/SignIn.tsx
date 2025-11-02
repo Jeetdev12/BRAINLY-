@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../components/Input";
 import { Button } from "../components/ui/Button";
-import { BACKEND_URL } from "../utilis/config";
 
 export default function SignIn() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -23,7 +22,7 @@ export default function SignIn() {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/signin`, {
         email,
         password,
       });

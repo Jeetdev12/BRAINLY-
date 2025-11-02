@@ -3,11 +3,15 @@ import CrossIcon from "../../icons/CrossIcon";
 import { Input } from "../Input";
 import { Button } from "./Button";
 import axios from "axios";
-export const  ContentType = {
-  Youtube : "youtube",
-  Twitter : "twitter",
-  Document : "document",
-} 
+
+export const ContentType = {
+  Youtube: "youtube",
+  Twitter: "twitter",
+  Document: "document",
+  Notes: "notes",
+  LinkedIn: "linkedin",
+  Email: "email",
+};
 
 export default function CreateContentModal({
   open,
@@ -18,7 +22,8 @@ export default function CreateContentModal({
 }) {
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
-  const [type, setType] = useState<any>(ContentType.Youtube);
+  const [type, setType] = useState<string>(ContentType.Youtube);
+  const [noteText, setNoteText] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   async function addContent() {
@@ -26,8 +31,18 @@ export default function CreateContentModal({
     const link = linkRef.current?.value?.trim();
     const token = localStorage.getItem("token");
 
-    if (!title || !link) {
-      alert("Please fill in all fields");
+    if (!title) {
+      alert("Please enter a title");
+      return;
+    }
+
+    if (type !== ContentType.Notes && !link) {
+      alert("Please enter a valid link");
+      return;
+    }
+
+    if (type === ContentType.Notes && !noteText.trim()) {
+      alert("Please enter some text for your note");
       return;
     }
 
@@ -38,23 +53,35 @@ export default function CreateContentModal({
 
     try {
       setLoading(true);
+      const payload =
+        type === ContentType.Notes
+          ? { title, content: noteText, type }
+          : { title, link, type };
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/addcontent`,
-        { title, link, type },
+        payload,
         {
-          headers: { authorization: `${token}` }, // lowercase key for Express
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
+      console.log("response12", response, noteText)
 
       if (response.status === 200 || response.statusText === "OK") {
         alert("✅ Content added successfully!");
-        titleRef.current!.value = "";
-        linkRef.current!.value = "";
+        if (titleRef.current) titleRef.current.value = "";
+        if (linkRef.current) linkRef.current.value = "";
+        setNoteText("");
+        closeModal();
+
+        setNoteText("");
         closeModal();
       }
     } catch (err: any) {
       console.error("❌ Error while adding content:", err);
-      alert(err.response?.data?.message || "Error adding content");
+      alert(err.message || "Error adding content");
     } finally {
       setLoading(false);
     }
@@ -64,13 +91,13 @@ export default function CreateContentModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Background overlay */}
+      {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={closeModal}
       ></div>
 
-      {/* Modal content */}
+      {/* Modal */}
       <div className="relative bg-white rounded-xl shadow-2xl p-6 w-[90%] max-w-md z-10 animate-fadeIn">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
@@ -85,29 +112,41 @@ export default function CreateContentModal({
           </button>
         </div>
 
-        {/* Inputs with Labels */}
+        {/* Inputs */}
         <div className="space-y-4 mb-4">
           <div className="flex flex-col text-left">
             <label className="text-sm font-medium text-gray-600 mb-1">
               Title
             </label>
-            <Input
-              placeholder="Enter a descriptive title"
-              reference={titleRef}
-              required
-            />
+            <Input placeholder="Enter a descriptive title" reference={titleRef} required />
           </div>
 
-          <div className="flex flex-col text-left">
-            <label className="text-sm font-medium text-gray-600 mb-1">
-              Link
-            </label>
-            <Input
-              placeholder="Paste your YouTube / Twitter / Document link"
-              reference={linkRef}
-              required
-            />
-          </div>
+          {/* Conditional Link or Notes Field */}
+          {type !== ContentType.Notes ? (
+            <div className="flex flex-col text-left">
+              <label className="text-sm font-medium text-gray-600 mb-1">
+                Link
+              </label>
+              <Input
+                placeholder="Paste your YouTube / Twitter / LinkedIn / Email link"
+                reference={linkRef}
+                required
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col text-left">
+              <label className="text-sm font-medium text-gray-600 mb-1">
+                Note Content
+              </label>
+              <textarea
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+                className="border border-gray-300 rounded-lg p-2 focus:ring focus:ring-indigo-200"
+                placeholder="Write your note here..."
+                rows={4}
+              />
+            </div>
+          )}
         </div>
 
         {/* Type Selection */}
@@ -116,21 +155,14 @@ export default function CreateContentModal({
             Content Type
           </label>
           <div className="grid grid-cols-3 gap-2">
-            <Button
-              onClick={() => setType(ContentType.Youtube)}
-              text="YouTube"
-              variant={type === ContentType.Youtube ? "Primary" : "Secondary"}
-            />
-            <Button
-              onClick={() => setType(ContentType.Twitter)}
-              text="Twitter"
-              variant={type === ContentType.Twitter ? "Primary" : "Secondary"}
-            />
-            <Button
-              onClick={() => setType(ContentType.Document)}
-              text="Document"
-              variant={type === ContentType.Document ? "Primary" : "Secondary"}
-            />
+            {Object.entries(ContentType).map(([key, value]) => (
+              <Button
+                key={key}
+                onClick={() => setType(value)}
+                text={key}
+                variant={type === value ? "Primary" : "Secondary"}
+              />
+            ))}
           </div>
         </div>
 

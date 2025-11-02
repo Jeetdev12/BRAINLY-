@@ -6,30 +6,77 @@ import { UserModel } from "../models/userModel";
 import { AuthRequest } from "../middleware/middleware";
 
 // Add Content
+// export const addContent = async (req: AuthRequest, res: Response) => {
+//   const { link, type } = req.body;
+//   const userId = req.userId;
+
+//   if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+//   try {
+//     const userInfo = await UserModel.findById(userId);
+//     console.log("userInfo::", userInfo);
+
+//     await ContentModel.create({
+//       link,
+//       type,
+//       userId,
+//       tags: [],
+//     });
+
+//     res.status(200).json({ message: "Content added successfully" });
+//   } catch (error: any) {
+//     res.status(500).json({
+//       message: `Content insertion failed: ${error.message}`,
+//     });
+//   }
+// };
+
+// Add Content
 export const addContent = async (req: AuthRequest, res: Response) => {
-  const { link, type } = req.body;
+  const { link, type, title, content } = req.body; // <-- added title & content
   const userId = req.userId;
 
   if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   try {
-    const userInfo = await UserModel.findById(userId);
-    console.log("userInfo::", userInfo);
+    // Validate input based on type
+    if (!title?.trim()) {
+      return res.status(400).json({ message: "Title is required" });
+    }
 
-    await ContentModel.create({
-      link,
+    if (type !== "notes" && !link?.trim()) {
+      return res.status(400).json({ message: "Link is required for this type" });
+    }
+
+    if (type === "notes" && !content?.trim()) {
+      return res.status(400).json({ message: "Content is required for notes" });
+    }
+
+    const payload: any = {
+      title,
       type,
       userId,
       tags: [],
-    });
+    };
 
-    res.status(200).json({ message: "Content added successfully" });
+    // Add appropriate field depending on content type
+    if (type === "notes") {
+      payload.content = content;
+    } else {
+      payload.link = link;
+    }
+
+    await ContentModel.create(payload);
+
+    res.status(200).json({ message: "✅ Content added successfully!" });
   } catch (error: any) {
+    console.error("Add Content Error:", error);
     res.status(500).json({
       message: `Content insertion failed: ${error.message}`,
     });
   }
 };
+
 
 //  Fetch all content
 export const allcontent = async (_req: AuthRequest, res: Response) => {
