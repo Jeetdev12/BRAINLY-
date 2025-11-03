@@ -100,7 +100,7 @@ export const Dashboard = () => {
       <div className="fixed ">
         <SideBar />
       </div>
-      <div className="min-h-screen p-4 ml-48 md:ml-62 bg-gray-100">
+      <div className="min-h-screen p-4 ml-48 md:ml-56 bg-gray-100">
         {/* <Header/> */}
         <CreateContentModal open={modelClose} closeModal={() => setModelClose(false)} />
         <div className="flex items-center justify-between  gap-2">
@@ -134,6 +134,7 @@ export const Dashboard = () => {
                   title={content?.title}
                   link={content.link?content.link:content.content}
                   type={content.type}
+                  createdAt={content.createdAt}
                 />
               ))}
             </div>

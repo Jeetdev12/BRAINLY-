@@ -66,5 +66,5 @@ export function useContent() {
     console.log("settype", type)
   }, [type]);
 
-  return {collection, contents, loading, error, type, setType, refresh: fetchContent };
+  return {collection, contents, loading, error, type, setType, refresh: fetchContent,setContents };
 }
