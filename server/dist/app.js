@@ -16,6 +16,7 @@ const startServer = async () => {
     // ✅ Simple and safe CORS setup
     app.use((0, cors_1.default)({
         origin: [
+            `${process.env.ORIGIN_URL}`,
             "http://localhost:5173",
             "https://brainly-fawn.vercel.app",
         ],
@@ -23,12 +24,9 @@ const startServer = async () => {
         credentials: true,
     }));
     // ✅ Handle preflight manually for safety (important for Render)
-    app.options("*", (0, cors_1.default)());
+    app.options("/any", (0, cors_1.default)());
     app.use(express_1.default.json());
     app.use("/api/v1", routes_1.default);
-    app.get("/", (req, res) => {
-        res.send("Server running fine!");
-    });
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 };

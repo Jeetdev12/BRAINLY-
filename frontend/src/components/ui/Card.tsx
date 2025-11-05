@@ -78,14 +78,6 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
     }
   };
 
-  const formattedTime = createdAt
-    ? dayjs(createdAt).fromNow()
-    : "Just now";
-
-  const exactTime = createdAt
-    ? dayjs(createdAt).format("DD/MM/YYYY, hh:mm A")
-    : "";
-
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-md w-full max-w-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200">
       {/* Header */}
