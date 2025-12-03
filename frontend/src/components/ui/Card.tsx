@@ -25,18 +25,28 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
   const [loading, setLoading] = useState(false);
   const { refresh } = useContent();
 
-  // ✅ Precompute derived data with useMemo
   const youtubeId = useMemo(() => {
     const match = link?.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
     return match ? match[1] : "";
   }, [link]);
 
   const linkedinId = useMemo(() => {
-    const match = link?.match(/linkedin\.com\/posts\/([^/?]+)/);
-    return match ? match[1] : "";
-  }, [link]);
+    if (!link) return "";
 
-  // ✅ Load Twitter widgets once when needed
+    const shareMatch = link.match(/urn:li:share:(\d+)/);
+    if (shareMatch) return shareMatch[1];
+
+    const postMatch = link.match(/linkedin\.com\/posts\/(?:[^/?]+-)?(\d+)/);
+    if (postMatch) return postMatch[1];
+
+    const activityMatch = link.match(/activity-(\d{10,})/);
+    if (activityMatch) return activityMatch[1];
+
+    return "";
+  }, [link]);
+  console.log("LinkedIn Id ", linkedinId)
+
+
   useEffect(() => {
     if ((window as any).twttr && type === "twitter") {
       (window as any).twttr.widgets.load();
@@ -169,15 +179,18 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
             )}
 
             {type === "linkedin" && linkedinId && (
-              <iframe
-                src={`https://www.linkedin.com/embed/feed/update/${linkedinId}`}
-                height="100%"
-                width="100%"
-                frameBorder="0"
-                allowFullScreen
-                title="LinkedIn Post"
-              ></iframe>
+              <>
+                <iframe
+                  src={`https://www.linkedin.com/embed/feed/update/${linkedinId}`}
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  allowFullScreen
+                  title="LinkedIn Post"
+                ></iframe>
+              </>
             )}
+
 
             {!youtubeId && !link && type !== "notes" && (
               <p className="text-gray-400 text-sm italic">No content available</p>
@@ -188,7 +201,7 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
 
       {/* Footer Time */}
       <div className="text-gray-500 text-xs flex items-center justify-start pl-4 pb-3">
-        
+
         {dayjs(createdAt).format("h:mm A · MMM D, YYYY")}
       </div>
     </div>

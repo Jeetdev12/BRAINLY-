@@ -126,6 +126,7 @@ export const Dashboard = () => {
           ) : contents.length === 0 ? (
             <NoNotes />
           ) : (
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
               {contents.map((content: any, index: number) => (
                 <Card
@@ -136,8 +137,10 @@ export const Dashboard = () => {
                   type={content.type}
                   createdAt={content.createdAt}
                 />
+                
               ))}
             </div>
+            
           )}
         </div>
 
