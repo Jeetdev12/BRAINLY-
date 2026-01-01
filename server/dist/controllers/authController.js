@@ -10,11 +10,15 @@ const signup = async (req, res) => {
     console.log("signup route hitted..");
     try {
         const { username, email, password } = req.body;
-        const response = await userModel_1.UserModel.create({ username, password, email });
+        const response = userModel_1.UserModel.find({ email });
+        console.log("Sign up response ", response);
+        //  if(response){
+        //  }
+        await userModel_1.UserModel.create({ username, password, email });
         return res.status(200).json({ message: "signedup successfully" });
     }
     catch (err) {
-        console.error("❌ Error in signup:", err);
+        console.error("Error in signup:", err);
         return res.status(500).json({ error: err.message });
     }
 };
