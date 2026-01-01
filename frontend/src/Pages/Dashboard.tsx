@@ -7,7 +7,7 @@ import { ShareIcon } from "../icons/ShareIcon"
 import Card from "../components/ui/Card"
 import axios from "axios"
 import {FRONTEND_URL } from "../utilis/config"
-import { useNavigate, useParams } from "react-router-dom"
+import {  useParams } from "react-router-dom"
 import UserIcon from "../icons/UserIcon"
 import { NoNotes } from "../components/NoNotes"
 import { useContent } from "../utilis/contentContext"
@@ -19,7 +19,7 @@ export const Dashboard = () => {
   const { loading, contents, refresh } = useContent()
   const [isToken, setIsToken] = useState(false)
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   console.log("Contente dasbor", contents)
   const params = useParams()
   const { id } = params

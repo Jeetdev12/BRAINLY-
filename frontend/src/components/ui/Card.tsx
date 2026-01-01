@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContent } from "../../hooks/useContent";
+// import { useContent } from "../../hooks/useContent";
 import { useEffect, useMemo, useState, type JSX } from "react";
 import toast from "react-hot-toast";
 import { DeleteIcon } from "../../icons/DeleteIcon";
@@ -23,7 +23,7 @@ interface CardProps {
 
 export default function Card({ title, link, type, contentId, createdAt }: CardProps) {
   const [loading, setLoading] = useState(false);
-  const { refresh } = useContent();
+  // const { refresh } = useContent();
 
   const youtubeId = useMemo(() => {
     const match = link?.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
