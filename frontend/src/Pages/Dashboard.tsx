@@ -47,7 +47,8 @@ export const Dashboard = () => {
   async function handleUserIconClick() {
     localStorage.removeItem("token")
     setIsToken(false)
-    navigate("/signin")
+    // navigate("/signin")
+    window.location.reload();
   }
   const token = localStorage.getItem("token")
 
@@ -96,7 +97,7 @@ export const Dashboard = () => {
 
 
   return (
-    <div className="w-screen">
+    <div className="w-full">
       <div className="fixed ">
         <SideBar />
       </div>

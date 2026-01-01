@@ -79,7 +79,8 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
       });
 
       toast.success("Content deleted successfully!");
-      await refresh();
+      // await refresh();
+      window.location.reload();
     } catch (err) {
       console.error("Delete error:", err);
       toast.error("Failed to delete content");
