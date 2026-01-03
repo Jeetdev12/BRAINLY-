@@ -10,6 +10,7 @@ import { Document } from "../../icons/Documents";
 import { BookOpen, Linkedin } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import OpenInNewTabIcon from "../../icons/OpenInTab";
 
 dayjs.extend(relativeTime);
 
@@ -87,41 +88,14 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
     } finally {
       setLoading(false);
     }
-  };  console.log("card logs :", title);
- 
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-md w-full max-w-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 py-3 px-4 bg-gray-50">
-        <div className="flex items-center gap-2 text-gray-700 truncate">
-          {icons[type]}
-          <p className="font-medium text-gray-900 truncate max-w-[200px]">
-            {title}
-          </p>
-        </div>
+  }; console.log("card logs :", title);
 
-        <div className="flex items-center gap-2">
-          <button
-            disabled={loading}
-            className="p-1.5 rounded-full hover:bg-gray-200 disabled:opacity-50"
-            onClick={() => navigator.share?.({ title, url: link })}
-            title="Share"
-          >
-            <ShareIcon className="w-4 h-4" />
-          </button>
-          <button
-            disabled={loading}
-            onClick={handleDelete}
-            className="p-1.5 rounded-full hover:bg-gray-200 disabled:opacity-50"
-            title="Delete"
-          >
-            <DeleteIcon className="w-4 h-4 text-red-500" />
-          </button>
-        </div>
-      </div>
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 shadow-md w-full max-w-md overflow-hidden flex flex-col hover:shadow-lg hover:bg-gray-200 transition-shadow duration-200">
+
 
       {/* Content Section */}
-      <div className="flex-grow flex items-center justify-center bg-white p-4 relative">
+      <div className="flex-grow flex items-center justify-center bg-white p-4 relative hover:bg-gray-200">
         {loading ? (
           <div className="flex flex-col items-center text-gray-500 animate-pulse">
             <span className="text-sm">Deleting...</span>
@@ -195,13 +169,44 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
             )}
           </div>
         )}
+        
       </div>
-
       {/* Footer Time */}
-      <div className="text-gray-500 text-xs flex items-center justify-start pl-4 pb-3">
+       
+      <p className="text-gray-500 text-xs  flex items-center justify-start pl-4 pb-3"> {dayjs(createdAt).format("h:mm A · MMM D, YYYY")}</p>
+      {/* <div >
 
-        {dayjs(createdAt).format("h:mm A · MMM D, YYYY")}
+      </div> */}
+      
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-gray-200 py-3 px-4 bg-gray-200 hover:bg-gray-200">
+        <div className="flex items-center gap-2 text-gray-700 truncate">
+          {icons[type]}
+          <p className="font-medium text-gray-900 truncate max-w-[200px]">
+            {title}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            disabled={loading}
+            className="p-1.5 rounded-full hover:bg-gray-400 disabled:opacity-50"
+            onClick={() => window.open(link, "_blank", "noopener,noreferrer")}
+            title="Open In New Tab"
+          >
+            <OpenInNewTabIcon />
+          </button>
+          <button
+            disabled={loading}
+            onClick={handleDelete}
+            className="p-1.5 rounded-full  hover:bg-gray-400 disabled:opacity-50"
+            title="Delete"
+          >
+            <DeleteIcon className="w-4 h-4 text-red-500" />
+          </button>
+        </div>
       </div>
+
     </div>
   );
 }
