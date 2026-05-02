@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useMemo, useState, type JSX } from "react";
 import toast from "react-hot-toast";
 import { DeleteIcon } from "../../icons/DeleteIcon";
-import { ShareIcon } from "../../icons/ShareIcon";
+// import { ShareIcon } from "../../icons/ShareIcon";
 import { TwitterIcon } from "../../icons/TwitterIcon";
 import { YoutubeIcon } from "../../icons/YoutubeIcon";
 import { Document } from "../../icons/Documents";
@@ -95,7 +95,7 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
 
 
       {/* Content Section */}
-      <div className="flex-grow flex items-center justify-center bg-white p-4 relative hover:bg-gray-200">
+      {link && <div className="flex-grow flex items-center justify-center bg-white p-4 relative hover:bg-gray-200">
         {loading ? (
           <div className="flex flex-col items-center text-gray-500 animate-pulse">
             <span className="text-sm">Deleting...</span>
@@ -170,7 +170,7 @@ export default function Card({ title, link, type, contentId, createdAt }: CardPr
           </div>
         )}
         
-      </div>
+      </div>}
       {/* Footer Time */}
        
       <p className="text-gray-500 text-xs  flex items-center justify-start pl-4 pb-3"> {dayjs(createdAt).format("h:mm A · MMM D, YYYY")}</p>

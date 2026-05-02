@@ -101,10 +101,10 @@ export const Dashboard = () => {
       <div className="fixed ">
         <SideBar />
       </div>
-      <div className="min-h-screen p-4 ml-48 md:ml-56 bg-gray-100">
+      <div className="min-h-screen p-4  bg-gray-100">
         {/* <Header/> */}
         <CreateContentModal open={modelClose} closeModal={() => setModelClose(false)} />
-        <div className="flex items-center justify-between  gap-2">
+        <div className="flex items-center justify-between ml-48 md:ml-56  gap-2">
           <h1 className="text-xl font-bold ">All Notes</h1>
           <div className="flex items-center gap-2">
             <Button onClick={() => { setModelClose(true) }} variant="Primary" text={"Add content"} startIcon={<PlusIcon />} />
