@@ -38,20 +38,24 @@ const mongoose_1 = __importStar(require("mongoose"));
 const ContentSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     link: { type: String },
-    content: { type: String }, // 🆕 for notes, email, or any text content
+    content: { type: String },
     type: {
         type: String,
         enum: [
             "youtube",
             "twitter",
+            "instagram",
+            "linkedin",
+            "job",
             "document",
             "notes",
-            "linkedin",
+            "quote",
             "email",
-        ], // 🧩 ensures valid content types
+        ],
         required: true,
     },
-    tags: [{ type: mongoose_1.default.Types.ObjectId, ref: "Tags" }],
+    tags: [{ type: String }],
+    readLater: { type: Boolean, default: false },
     userId: { type: mongoose_1.default.Types.ObjectId, ref: "user", required: true },
 }, { timestamps: true });
 exports.ContentModel = (0, mongoose_1.model)("content", ContentSchema);

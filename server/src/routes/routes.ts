@@ -1,21 +1,29 @@
 import { Router } from "express";
-import { signin, signup } from "../controllers/authController";
-import { addContent,allcontent,deleteContent, shareBrain, shareBrainId, type } from "../controllers/crudController";
+import { signin, signup, updateUser } from "../controllers/authController";
+import {
+  addContent,
+  allcontent,
+  deleteContent,
+  shareBrain,
+  shareBrainId,
+  filterByType,
+} from "../controllers/crudController";
 import { userMiddleware } from "../middleware/middleware";
 
- const router = Router();
+const router = Router();
 
-router.post("/signup",signup)
-router.post("/signin",signin)
-router.get("/content",userMiddleware ,allcontent);
-router.post("/addcontent",userMiddleware ,addContent);
-router.get("/filter/type" ,type);
+router.post("/signup", signup);
+router.post("/signin", signin);
+router.post("/update", updateUser);
 
+router.get("/content", userMiddleware, allcontent);
+router.post("/addcontent", userMiddleware, addContent);
 
-router.delete("/delete-content", deleteContent);
-router.post("/brain/share" ,userMiddleware,shareBrain);
-router.get("/brain/:shareLink",userMiddleware,shareBrainId)
+router.get("/filter", userMiddleware, filterByType);
 
+router.delete("/delete-content", userMiddleware, deleteContent);
 
-export default router
+router.post("/brain/share", userMiddleware, shareBrain);
+router.get("/brain/:shareLink", shareBrainId);
 
+export default router;

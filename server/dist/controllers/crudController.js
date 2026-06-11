@@ -1,125 +1,71 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shareBrainId = exports.shareBrain = exports.deleteContent = exports.type = exports.allcontent = exports.addContent = void 0;
+exports.shareBrainId = exports.shareBrain = exports.deleteContent = exports.filterByType = exports.allcontent = exports.addContent = void 0;
 const contentModel_1 = require("../models/contentModel");
 const linkModel_1 = require("../models/linkModel");
 const utils_1 = require("../utils");
 const userModel_1 = require("../models/userModel");
-// Add Content
-// export const addContent = async (req: AuthRequest, res: Response) => {
-//   const { link, type } = req.body;
-//   const userId = req.userId;
-//   if (!userId) return res.status(401).json({ message: "Unauthorized" });
-//   try {
-//     const userInfo = await UserModel.findById(userId);
-//     console.log("userInfo::", userInfo);
-//     await ContentModel.create({
-//       link,
-//       type,
-//       userId,
-//       tags: [],
-//     });
-//     res.status(200).json({ message: "Content added successfully" });
-//   } catch (error: any) {
-//     res.status(500).json({
-//       message: `Content insertion failed: ${error.message}`,
-//     });
-//   }
-// };
-// Add Content
 const addContent = async (req, res) => {
-    const { link, type, title, content } = req.body; // <-- added title & content
+    const { link, type, title, content } = req.body;
     const userId = req.userId;
     if (!userId)
         return res.status(401).json({ message: "Unauthorized" });
+    if (!title?.trim())
+        return res.status(400).json({ message: "Title is required" });
+    const isTextType = type === "notes" || type === "quote";
+    if (!isTextType && !link?.trim())
+        return res.status(400).json({ message: "Link is required for this type" });
+    if (isTextType && !content?.trim())
+        return res.status(400).json({ message: "Content is required" });
     try {
-        // Validate input based on type
-        if (!title?.trim()) {
-            return res.status(400).json({ message: "Title is required" });
-        }
-        if (type !== "notes" && !link?.trim()) {
-            return res.status(400).json({ message: "Link is required for this type" });
-        }
-        if (type === "notes" && !content?.trim()) {
-            return res.status(400).json({ message: "Content is required for notes" });
-        }
-        const payload = {
-            title,
-            type,
-            userId,
-            tags: [],
-        };
-        // Add appropriate field depending on content type
-        if (type === "notes") {
+        const payload = { title, type, userId, tags: [] };
+        if (isTextType)
             payload.content = content;
-        }
-        else {
+        else
             payload.link = link;
-        }
         await contentModel_1.ContentModel.create(payload);
-        res.status(200).json({ message: "✅ Content added successfully!" });
+        res.status(200).json({ message: "Content added successfully" });
     }
     catch (error) {
-        console.error("Add Content Error:", error);
-        res.status(500).json({
-            message: `Content insertion failed: ${error.message}`,
-        });
+        res.status(500).json({ message: `Content insertion failed: ${error.message}` });
     }
 };
 exports.addContent = addContent;
-//  Fetch all content
-const allcontent = async (_req, res) => {
+const allcontent = async (req, res) => {
     try {
-        const content = await contentModel_1.ContentModel.find();
-        res.status(200).json({
-            message: "Content fetched successfully",
-            content,
-        });
+        const content = await contentModel_1.ContentModel.find({ userId: req.userId });
+        res.status(200).json({ message: "Content fetched successfully", content });
     }
     catch (error) {
         res.status(500).json({ message: `Content fetch failed: ${error.message}` });
     }
 };
 exports.allcontent = allcontent;
-//  Filter by type
-const type = async (req, res) => {
+const filterByType = async (req, res) => {
     try {
-        console.log("Req info in type : ", req);
         const { type } = req.query;
-        const content = await contentModel_1.ContentModel.find({ type });
-        res.status(200).json({
-            success: true,
-            content,
-            message: `${type} content fetched successfully`
-        });
+        const content = await contentModel_1.ContentModel.find({ type, userId: req.userId });
+        res.status(200).json({ success: true, content });
     }
     catch (error) {
-        res.status(500).json({ success: false,
-            message: `Error filtering content: ${error.message}`
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };
-exports.type = type;
-//  Delete content
+exports.filterByType = filterByType;
 const deleteContent = async (req, res) => {
     try {
         const { contentId } = req.body;
-        const isContentExist = await contentModel_1.ContentModel.findById(contentId);
-        if (!isContentExist) {
-            return res.status(404).json({ message: "Content not found" });
-        }
-        const result = await contentModel_1.ContentModel.deleteOne({ _id: contentId });
-        res.status(200).json({
-            message: "Content deleted successfully",
-            deletedCount: result.deletedCount,
-        });
+        const exists = await contentModel_1.ContentModel.findOne({ _id: contentId, userId: req.userId });
+        if (!exists)
+            return res.status(404).json({ message: "Content not found or unauthorized" });
+        await contentModel_1.ContentModel.deleteOne({ _id: contentId, userId: req.userId });
+        res.status(200).json({ message: "Content deleted successfully" });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 exports.deleteContent = deleteContent;
-//  Share brain (generate/delete link)
 const shareBrain = async (req, res) => {
     try {
         const { share } = req.body;
@@ -128,18 +74,15 @@ const shareBrain = async (req, res) => {
             return res.status(401).json({ message: "Access denied" });
         if (share) {
             const existingLink = await linkModel_1.LinkModel.findOne({ userId });
-            if (!existingLink) {
-                return res.json({
-                    message: "Link is wrong "
-                });
-            }
+            if (existingLink)
+                return res.json({ hash: existingLink.hash }); // reuse existing
             const hash = (0, utils_1.random)(10);
             await linkModel_1.LinkModel.create({ userId, hash, share: true });
-            res.json({ hash });
+            return res.json({ hash });
         }
         else {
             await linkModel_1.LinkModel.deleteOne({ userId });
-            res.status(200).json({ message: "Link removed" });
+            return res.status(200).json({ message: "Link removed" });
         }
     }
     catch (error) {
@@ -147,20 +90,17 @@ const shareBrain = async (req, res) => {
     }
 };
 exports.shareBrain = shareBrain;
-//  Share brain via link ID
 const shareBrainId = async (req, res) => {
     try {
         const hash = req.params.shareLink;
-        const link = await linkModel_1.LinkModel.findOne({ hash, });
-        if (!link) {
+        const link = await linkModel_1.LinkModel.findOne({ hash });
+        if (!link)
             return res.status(404).json({ message: "Invalid share link" });
-        }
         const content = await contentModel_1.ContentModel.find({ userId: link.userId });
-        const username = await userModel_1.UserModel.findById(link.userId);
-        if (!username) {
+        const user = await userModel_1.UserModel.findById(link.userId).select("username");
+        if (!user)
             return res.status(404).json({ message: "User not found" });
-        }
-        res.json({ username, content });
+        res.json({ username: user.username, content });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
