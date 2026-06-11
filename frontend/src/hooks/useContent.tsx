@@ -1,70 +1,66 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import axios from "axios"
+import { useEffect, useState } from "react"
 
 export interface Content {
-  _id: string;
-  title: string;
-  link: string;
-  type: string;
-  userId: string;
-  tags: string[];
-  __v?: number;
-}
-
-export interface UseContentResult {
-  contents: Content[];
-  loading: boolean;
-  error: string | null;
-  refresh: () => Promise<void>;
+  _id: string
+  title: string
+  link?: string
+  content?: string
+  type: string
+  userId: string
+  tags: string[]
+  readLater: boolean
+  createdAt: string
+  updatedAt?: string
 }
 
 export function useContent() {
-  const [contents, setContents] = useState<Content[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-   const [collection, setCollection] = useState<any>([])
-  const [type, setType] = useState<any>()
+  const [contents, setContents] = useState<Content[]>([])
+  const [loading, setLoading]   = useState(true)
+  const [error, setError]       = useState<string | null>(null)
 
+  const fetchContent = async (filterType?: string) => {
+    const token = localStorage.getItem("token")
 
-  const token = localStorage.getItem("token");
-
-  const fetchContent = async () => {
     if (!token) {
-      setError("No token found, please login first.");
-      setLoading(false);
-      return;
+      setError("Not authenticated")
+      setLoading(false)
+      return
     }
 
     try {
-      setLoading(true);
-      console.log("type2", type)
-      const url = type
-        ? `${import.meta.env.VITE_BACKEND_URL}/api/v1/filter/type?type=${type}`
-        : `${import.meta.env.VITE_BACKEND_URL}/api/v1/content`;
+      setLoading(true)
+      setError(null)
+
+      const url = filterType
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/v1/filter/type?type=${filterType}`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/v1/content`
 
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log(response)
-      setContents(response.data.content || []);
-      setError(null);
+      })
+
+      setContents(response.data.content || [])
     } catch (err: any) {
-      console.error("Error fetching content:", err);
-      setError(err.message);
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token")
+        window.location.href = "/signin"
+      }
+      setError(err.response?.data?.message || err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    setCollection(contents)
-    console.log("contentsuse", contents)
-  }, [contents])
+    fetchContent()
+  }, [])
 
-  useEffect(() => {
-    fetchContent();
-    console.log("settype", type)
-  }, [type]);
-
-  return {collection, contents, loading, error, type, setType, refresh: fetchContent,setContents };
+  return {
+    contents,
+    setContents,
+    loading,
+    error,
+    refresh: fetchContent,
+  }
 }

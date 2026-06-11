@@ -1,15 +1,11 @@
-import { Plus } from "lucide-react";
-import { Button } from "./ui/Button";
 import { useState } from "react";
 import CreateContentModal from "./ui/CreateContentModal";
+import { Button } from "@base-ui/react/button";
 
 
 export function NoNotes() {
-    // const setIsCreateContentModelOpen = useSetRecoilState(CreateContentModelStatus);
       const [modelClose, setModelClose] = useState<any>(false)
-    
-            
-    
+
     return <div className="flex justify-center items-center">
         <CreateContentModal open={modelClose} closeModal={() => setModelClose(false)} />
         <div className="flex flex-col justify-center items-center h-96 w-full text-center p-6">
@@ -24,7 +20,7 @@ export function NoNotes() {
             </div>
             <h2 className="text-3xl font-bold text-gray-700 mb-2">No Notes to Show</h2>
             <p className="text-gray-500 mb-6 max-w-md">No notes found for the selected category. Try selecting a different category or add new content.</p>
-            <Button className={"bg-gray-300 p-2 rounded-sm hover:cursor-pointer hover:bg-gray-400"} startIcon={<Plus />} text={"Add Content"} variant={"none"} onClick={() => { setModelClose(true) }} 
+            <Button className={"bg-gray-300 p-2 rounded-sm hover:cursor-pointer hover:bg-gray-400"}    onClick={() => { setModelClose(true) }} 
              />
         </div>
     </div>
