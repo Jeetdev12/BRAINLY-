@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button"
 import { Github, Twitter, Linkedin } from 'lucide-react'
 import { Logo } from '@/icons/Logo'
+import { Button } from '@base-ui/react/button'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -58,7 +58,7 @@ export function Footer() {
                 placeholder="Enter your email"
                 className="w-full rounded-md border border-white/[0.06] bg-white/[0.02] px-2.5 py-1.5 text-xs text-white placeholder-white/20 outline-none focus:border-indigo-500/50"
               />
-              <Button size="sm" className="bg-white px-3 text-xs font-semibold text-gray-950 hover:bg-white/90">
+              <Button className="bg-white px-3 text-xs font-semibold text-gray-950 hover:bg-white/90">
                 Join
               </Button>
             </div>

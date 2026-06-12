@@ -11,65 +11,10 @@ import {
   Lock,
   LogIn,
 } from "lucide-react"
-
-function InputField({
-  label,
-  icon,
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-  error,
-  right,
-}: {
-  label: string
-  icon: React.ReactNode
-  type?: string
-  placeholder: string
-  value: string
-  onChange: (v: string) => void
-  error?: string
-  right?: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] font-medium uppercase tracking-widest text-white/30">
-        {label}
-      </label>
-
-      <div className="relative">
-        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25">
-          {icon}
-        </span>
-
-        <input
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={`w-full rounded-xl border bg-white/[0.03] pl-10 pr-10 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none transition-all
-          ${
-            error
-              ? "border-red-500/40 focus:border-red-500/60"
-              : "border-white/[0.07] focus:border-blue-500/40 focus:bg-white/[0.05]"
-          }`}
-        />
-
-        {right && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2">
-            {right}
-          </span>
-        )}
-      </div>
-
-      {error && <p className="text-[11px] text-red-400">{error}</p>}
-    </div>
-  )
-}
+import { InputField } from "@/utilis/Constants"
 
 export default function SignIn() {
   const navigate = useNavigate()
-
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPass, setShowPass] = useState(false)
@@ -95,7 +40,6 @@ export default function SignIn() {
 
   async function handleSubmit() {
     const e = validate()
-
     if (Object.keys(e).length) {
       setErrors(e)
       return
@@ -106,7 +50,6 @@ export default function SignIn() {
 
     try {
       setLoading(true)
-
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/signin`,
         {
@@ -129,7 +72,7 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen bg-[#080808] flex items-center justify-center px-4">
-      // Background Glow 
+      // Background Glow
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-96 w-96 rounded-full bg-blue-500/8 blur-3xl" />
         <div className="absolute bottom-0 right-1/4 h-64 w-64 rounded-full bg-yellow-500/6 blur-3xl" />

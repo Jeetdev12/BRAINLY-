@@ -3,38 +3,7 @@ import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import axios from "axios"
 import { BrainCircuit, Eye, EyeOff, Loader2, User, Mail, Lock, Sparkles } from "lucide-react"
-
-function InputField({
-  label, icon, type = "text", placeholder, value, onChange, error, right,
-}: {
-  label: string
-  icon: React.ReactNode
-  type?: string
-  placeholder: string
-  value: string
-  onChange: (v: string) => void
-  error?: string
-  right?: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] font-medium uppercase tracking-widest text-white/30">{label}</label>
-      <div className="relative">
-        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/25">{icon}</span>
-        <input
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          className={`w-full rounded-xl border bg-white/[0.03] pl-10 pr-10 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none transition-all
-            ${error ? "border-red-500/40 focus:border-red-500/60" : "border-white/[0.07] focus:border-blue-500/40 focus:bg-white/[0.05]"}`}
-        />
-        {right && <span className="absolute right-3 top-1/2 -translate-y-1/2">{right}</span>}
-      </div>
-      {error && <p className="text-[11px] text-red-400">{error}</p>}
-    </div>
-  )
-}
+import { InputField } from "@/utilis/Constants"
 
 export default function SignUp() {
   const navigate = useNavigate()

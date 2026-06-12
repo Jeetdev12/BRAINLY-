@@ -7,7 +7,6 @@ import {
   LogOut, Settings, X, Loader2, Check, Eye, EyeOff,
 } from "lucide-react"
 
-
 interface JWTPayload {
   _id: string
   username?: string
@@ -27,7 +26,6 @@ function getUserFromToken(): { username: string; email: string } {
     return { username: "User", email: "" }
   }
 }
-
 
 function SettingsPanel({ onClose }: { onClose: () => void }) {
   const user = getUserFromToken()
@@ -140,8 +138,6 @@ function SettingsPanel({ onClose }: { onClose: () => void }) {
     </div>
   )
 }
-
-// ─── Sidebar ───────────────────────────────────────────────────────────────────
 
 export function Sidebar({
   collapsed, setCollapsed, activeFilter, setActiveFilter, counts, filters,
