@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button"
 import { Logo } from "@/icons/Logo"
 import { Link } from "react-router-dom"
+import { Button } from "./button"
 
 export function HeaderHome() {
   return (
